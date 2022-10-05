@@ -13,7 +13,7 @@ DATA/
 .Python
 build/
 develop-eggs/
-dist/
+dist/S
 downloads/
 eggs/
 .eggs/
