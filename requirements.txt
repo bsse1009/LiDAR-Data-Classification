@@ -1,2 +1,5 @@
 pyqtgraph
 numpy
+open3d
+laspy
+lidario

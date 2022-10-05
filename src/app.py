@@ -1,8 +1,8 @@
 ################################################################################
 ##
-## BY: WANDERSON M.PIMENTA
-## PROJECT MADE WITH: Qt Designer and PySide2
-## V: 1.0.0
+# BY: Md Ibrahim Khalil
+# PROJECT MADE WITH: Qt Designer and PySide2
+# V: 1.0.0
 ##
 ################################################################################
 
@@ -14,17 +14,19 @@ from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 import pyqtgraph.opengl as gl
+import open3d as o3d
+from DataManager.read_point_cloud import point_cloud_reader
 
+# ==> MAIN WINDOW
+from GUI.GUI import Ui_MainWindow
+from GUI.ui_splash_screen import Ui_SplashScreen
 
-
-## ==> MAIN WINDOW
-from GUI import Ui_MainWindow
-from ui_splash_screen import Ui_SplashScreen
-
-## ==> GLOBALS
+# ==> GLOBALS
 counter = 0
 
 # YOUR APPLICATION
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
@@ -40,39 +42,42 @@ class MainWindow(QMainWindow):
         self.ui.display_layout.addWidget(self.w)
         self.ui.classification_layout.addWidget(self.w1)
         self.ui.stackedWidget.setCurrentWidget(self.ui.display_page)
-        ## Add a grid to the view
+        # Add a grid to the view
         self.g = gl.GLGridItem()
-        self.g.scale(2,2,1)
-        self.g.setDepthValue(10)  # draw grid after surfaces since they may be translucent
+        self.g.scale(2, 2, 1)
+        # draw grid after surfaces since they may be translucent
+        self.g.setDepthValue(10)
         self.w.addItem(self.g)
         self.w1.addItem(self.g)
+        self.pcd = o3d.geometry.PointCloud()
+        self.ui.pushButton.clicked.connect(lambda: self.open_file())
 
-        self.ui.pushButton.clicked.connect(lambda:self.draw3D())
+        self.ui.btnClassify.clicked.connect(lambda: self.draw3D())
 
-        self.ui.btnClassify.clicked.connect(lambda:self.draw3D())
+    def open_file(self):
+        fname = QFileDialog.getOpenFileName(
+            self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//DATA', "Point cloud files (*.ply *.txt *.xyz)")
+        path = fname[0]
+        print(path)
+        self.pcd = point_cloud_reader(path)
+        self.view_point_cloud()
 
+    def view_point_cloud(self):
+        o3d.visualization.draw_geometries([self.pcd],
+                                          width=1850,
+                                          height=920,
+                                          #   left=10,
+                                          #   top=10
+                                          )
 
-    def draw3D(self): 
+    def draw3D(self):
         # self.ui.stackedWidget.setCurrentWidget(self.ui.classification_page)
         x = np.linspace(-8, 8, 50)
         y = np.linspace(-8, 8, 50)
-        z = 0.1 * ((x.reshape(50,1) ** 2) - (y.reshape(1,50) ** 2))
+        z = 0.1 * ((x.reshape(50, 1) ** 2) - (y.reshape(1, 50) ** 2))
         p2 = gl.GLSurfacePlotItem(x=x, y=y, z=z, shader='normalColor')
-        p2.translate(-10,-10,0)
+        p2.translate(-10, -10, 0)
         self.w.addItem(p2)
-
-    def draw(self):
-        x = []
-        y = []
-        with open('C://Users//user//Desktop//SPL3//LiDAR_Classification_APP//Final//Data//KME_cars.xyz', 'r') as f:
-            lines = f.readlines()
-            for i, line in enumerate(lines):
-                if i == 0:
-                    continue
-                x.append(float(line.split(';')[0]))
-                y.append(float(line.split(';')[1]))
-
-        self.ui.graphicsView.plot(x, y, pen=(i,3))
 
     def clear(self):
         self.ui.graphicsView.clear()
@@ -85,15 +90,14 @@ class SplashScreen(QMainWindow):
         self.ui = Ui_SplashScreen()
         self.ui.setupUi(self)
 
-        ## UI ==> INTERFACE CODES
+        # UI ==> INTERFACE CODES
         ########################################################################
 
-        ## REMOVE TITLE BAR
+        # REMOVE TITLE BAR
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
 
-
-        ## DROP SHADOW EFFECT
+        # DROP SHADOW EFFECT
         self.shadow = QGraphicsDropShadowEffect(self)
         self.shadow.setBlurRadius(20)
         self.shadow.setXOffset(0)
@@ -101,7 +105,7 @@ class SplashScreen(QMainWindow):
         self.shadow.setColor(QColor(0, 0, 0, 60))
         self.ui.dropShadowFrame.setGraphicsEffect(self.shadow)
 
-        ## QTIMER ==> START
+        # QTIMER ==> START
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.progress)
         # TIMER IN MILLISECONDS
@@ -110,19 +114,21 @@ class SplashScreen(QMainWindow):
         # CHANGE DESCRIPTION
 
         # Initial Text
-        self.ui.label_description.setText("<strong>WELCOME</strong> TO MY APPLICATION")
+        self.ui.label_description.setText(
+            "<strong>WELCOME</strong> TO MY APPLICATION")
 
         # Change Texts
-        QtCore.QTimer.singleShot(150, lambda: self.ui.label_description.setText("<strong>LOADING</strong> DATABASE"))
-        QtCore.QTimer.singleShot(300, lambda: self.ui.label_description.setText("<strong>LOADING</strong> USER INTERFACE"))
+        QtCore.QTimer.singleShot(150, lambda: self.ui.label_description.setText(
+            "<strong>LOADING</strong> DATABASE"))
+        QtCore.QTimer.singleShot(300, lambda: self.ui.label_description.setText(
+            "<strong>LOADING</strong> USER INTERFACE"))
 
-
-        ## SHOW ==> MAIN WINDOW
+        # SHOW ==> MAIN WINDOW
         ########################################################################
         self.show()
         ## ==> END ##
 
-    ## ==> APP FUNCTIONS
+    # ==> APP FUNCTIONS
     ########################################################################
     def progress(self):
 
@@ -145,8 +151,6 @@ class SplashScreen(QMainWindow):
 
         # INCREASE COUNTER
         counter += 1
-
-
 
 
 if __name__ == "__main__":
