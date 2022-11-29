@@ -2,7 +2,7 @@ import open3d as o3d
 import os
 import numpy as np
 from util.point_cloud_util import load_labels, write_labels
-from dataset.semantic_dataset import train_full_file_prefixes
+from semantic_dataset import train_full_file_prefixes
 
 
 def down_sample(
@@ -19,11 +19,12 @@ def down_sample(
     except:
         dense_pcd = None
         print("point cloud file not found {}".format(dense_pcd_path))
-        return
     try:
         dense_labels = load_labels(dense_label_path)
+        dense_labels = dense_labels[dense_labels.files[0]]
     except:
         dense_labels = None
+        print("dense_label_path not found {}".format(dense_label_path))
 
     # Skip label 0, we use explicit frees to reduce memory usage
     print("Num points:", np.asarray(dense_pcd.points).shape[0])
@@ -31,6 +32,8 @@ def down_sample(
         non_zero_indexes = dense_labels != 0
 
         dense_points = np.asarray(dense_pcd.points)[non_zero_indexes]
+        print(dense_points.shape)
+        print(dense_labels.shape, non_zero_indexes.shape)
         # dense_pcd.points = open3d.Vector3dVector()
         dense_pcd.points = o3d.utility.Vector3dVector(dense_points)
         del dense_points
@@ -80,10 +83,10 @@ if __name__ == "__main__":
 
     for file_prefix in train_full_file_prefixes:
         dense_pcd_path = os.path.join(raw_dir, file_prefix + ".pcd")
-        dense_label_path = os.path.join(raw_dir, file_prefix + ".labels")
+        dense_label_path = os.path.join(raw_dir, file_prefix + "_labels.npz")
         sparse_pcd_path = os.path.join(downsampled_dir, file_prefix + ".pcd")
         sparse_label_path = os.path.join(
-            downsampled_dir, file_prefix + ".labels")
+            downsampled_dir, file_prefix + "_labels")
 
         # Put down_sample in a function for garbage collection
         down_sample(

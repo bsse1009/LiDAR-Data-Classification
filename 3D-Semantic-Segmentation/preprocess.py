@@ -1,12 +1,13 @@
 import os
 import open3d as o3d
 import numpy as np
-from dataset.semantic_dataset import train_full_file_prefixes
+from semantic_dataset import train_full_file_prefixes
 
 
 def view_point_cloud_data(pcd_file):
     pcd = o3d.io.read_point_cloud(pcd_file)
     o3d.visualization.draw_geometries([pcd],
+                                      width=700,height=700,left=50,top=50,
                                       zoom=0.3412,
                                       front=[0.4257, -0.2125, -0.8795],
                                       lookat=[2.6172, 2.0475, 1.532],
@@ -17,11 +18,11 @@ def point_cloud_np_to_pcd(raw_dir, file_prefix, view=False):
     pcd_file = os.path.join(raw_dir, file_prefix + ".pcd")
 
     # Skip if already done
-    # if os.path.isfile(pcd_file):
-    #     print("pcd {} exists, skipped".format(pcd_file))
-    #     if view:
-    #         view_point_cloud_data(pcd_file)
-    #     return
+    if os.path.isfile(pcd_file):
+        print("pcd {} exists, skipped".format(pcd_file))
+        if view:
+            view_point_cloud_data(pcd_file)
+        return
 
     # converting .npz -> .pcd
     print("converting .npz->.pcd")
@@ -47,7 +48,7 @@ def point_cloud_np_to_pcd(raw_dir, file_prefix, view=False):
     # data_colors = data_colors[sort_idx]
 
     # Normalize RGB
-    # data_colors = data_colors.astype('float32')/255
+    data_colors = data_colors.astype('float32')/255.0
 
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(data_points)
@@ -65,4 +66,4 @@ if __name__ == "__main__":
     # print(raw_dir)
     for file_prefix in train_full_file_prefixes:
         point_cloud_np_to_pcd(
-            raw_dir=raw_dir, file_prefix=file_prefix)
+            raw_dir=raw_dir, file_prefix=file_prefix, view=True)

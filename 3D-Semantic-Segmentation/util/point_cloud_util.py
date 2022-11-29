@@ -1,5 +1,6 @@
 import numpy as np
-import open3d
+import open3d as o3d
+import os
 
 
 def _label_to_colors(labels):
@@ -46,18 +47,19 @@ def colorize_point_cloud(point_cloud, labels):
     else:
         colors = _label_to_colors(labels)
     # np.testing.assert_equal(colors, colors_v2)
-    point_cloud.colors = open3d.Vector3dVector()  # Clear it to save memory
-    point_cloud.colors = open3d.Vector3dVector(colors)
+    point_cloud.colors = o3d.io.Vector3dVector()  # Clear it to save memory
+    point_cloud.colors = o3d.io.Vector3dVector(colors)
 
 
 def load_labels(label_path):
-    # Assuming each line is a valid int
-    with open(label_path, "r") as f:
-        labels = [int(line) for line in f]
-    return np.array(labels, dtype=np.int32)
+    # # Assuming each line is a valid int
+    # with open(label_path, "r") as f:
+    #     labels = [int(line) for line in f]
+    return np.load(label_path)
 
 
 def write_labels(label_path, labels):
-    with open(label_path, "w") as f:
-        for label in labels:
-            f.write("%d\n" % label)
+    # with open(label_path, "w") as f:
+    #     for label in labels:
+    #         f.write("%d\n" % label)
+    np.savez(label_path, labels)
