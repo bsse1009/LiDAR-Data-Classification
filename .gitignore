@@ -8,6 +8,7 @@ __pycache__/
 
 # Data files
 DATA/
+3D-Semantic-Segmentation/dataset/semantic_raw/
 
 # Distribution / packaging
 .Python

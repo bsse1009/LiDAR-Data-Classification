@@ -1,479 +1,282 @@
-import os
-import sys
-import json
-import datetime
-import numpy as np
-import tensorflow as tf
-import multiprocessing as mp
 import argparse
-import time
-from datetime import datetime
-
-import util.metric as metric
-import model
+import os
+import json
 from semantic_dataset import SemanticDataset
+import torch
+import datetime
+import logging
+from pathlib import Path
+import sys
+import importlib
+import shutil
+import tqdm
+from util.provider import provider
+import numpy as np
+import time
 
-# Two global arg collections
-parser = argparse.ArgumentParser()
-parser.add_argument("--train_set", default="train", help="train, train_full")
-parser.add_argument("--config_file", default="semantic.json",
-                    help="config file path")
-
-FLAGS = parser.parse_args()
-PARAMS = json.loads(open(FLAGS.config_file).read())
-os.makedirs(PARAMS["logdir"], exist_ok=True)
-
-# Import dataset
-TRAIN_DATASET = SemanticDataset(
-    num_points_per_sample=PARAMS["num_point"],
-    split=FLAGS.train_set,
-    box_size_x=PARAMS["box_size_x"],
-    box_size_y=PARAMS["box_size_y"],
-    use_color=PARAMS["use_color"],
-    path=PARAMS["data_path"],
-)
-VALIDATION_DATASET = SemanticDataset(
-    num_points_per_sample=PARAMS["num_point"],
-    split="validation",
-    box_size_x=PARAMS["box_size_x"],
-    box_size_y=PARAMS["box_size_y"],
-    use_color=PARAMS["use_color"],
-    path=PARAMS["data_path"],
-)
-NUM_CLASSES = TRAIN_DATASET.num_classes
-
-# Start logging
-LOG_FOUT = open(os.path.join(PARAMS["logdir"], "log_train.txt"), "w")
-EPOCH_CNT = 0
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = BASE_DIR
+sys.path.append(os.path.join(ROOT_DIR, 'models'))
 
 
-def log_string(out_str):
-    LOG_FOUT.write(out_str + "\n")
-    LOG_FOUT.flush()
-    print(out_str)
+def inplace_relu(m):
+    classname = m.__class__.__name__
+    if classname.find('ReLU') != -1:
+        m.inplace=True
 
 
-def update_progress(progress):
-    """
-    Displays or updates a console progress bar
-    Args:
-        progress: A float between 0 and 1. Any int will be converted to a float.
-                  A value under 0 represents a 'halt'.
-                  A value at 1 or bigger represents 100%
-    """
-    barLength = 10  # Modify this to change the length of the progress bar
-    if isinstance(progress, int):
-        progress = round(float(progress), 2)
-    if not isinstance(progress, float):
-        progress = 0
-    if progress < 0:
-        progress = 0
-    if progress >= 1:
-        progress = 1
-    block = int(round(barLength * progress))
-    text = "\rProgress: [{}] {}%".format(
-        "#" * block + "-" * (barLength - block), progress * 100
+def main():
+    def log_string(str):
+        logger.info(str)
+        print(str)
+
+    '''HYPER PARAMETER'''
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--train_set", default="train", help="train, train_full")
+    parser.add_argument("--config_file", default="semantic.json", help="config file path")
+    # parser.add_argument("--gpu", type=str, default='0', help='GPU to use [default: GPU 0]')
+
+    FLAGS = parser.parse_args()
+    PARAMS = json.loads(open(FLAGS.config_file).read())
+    # os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
+
+    '''CREATE DIR'''
+    timestr = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M'))
+    experiment_dir = Path('./log/')
+    experiment_dir.mkdir(exist_ok=True)
+    experiment_dir = experiment_dir.joinpath('sem_seg')
+    experiment_dir.mkdir(exist_ok=True)
+    if PARAMS.log_dir is None:
+        experiment_dir = experiment_dir.joinpath(timestr)
+    else:
+        experiment_dir = experiment_dir.joinpath(PARAMS.log_dir)
+    experiment_dir.mkdir(exist_ok=True)
+    checkpoints_dir = experiment_dir.joinpath('checkpoints/')
+    checkpoints_dir.mkdir(exist_ok=True)
+    log_dir = experiment_dir.joinpath('logs/')
+    log_dir.mkdir(exist_ok=True)
+
+    '''LOG'''
+    logger = logging.getLogger("Model")
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler = logging.FileHandler('%s/%s.txt' % (log_dir, args.model))
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+    log_string('PARAMETER ...')
+    log_string(PARAMS)
+
+    print("start loading training data ...")
+    TRAIN_DATASET = SemanticDataset(
+        num_points_per_sample=PARAMS["num_point"],
+        split=FLAGS.train_set,
+        box_size_x=PARAMS["box_size_x"],
+        box_size_y=PARAMS["box_size_y"],
+        use_color=PARAMS["use_color"],
+        path=PARAMS["data_path"],
     )
-    sys.stdout.write(text)
-    sys.stdout.flush()
-
-
-def get_learning_rate(batch):
-    """Compute the learning rate for a given batch size and global parameters
-
-    Args:
-        batch (tf.Variable): the batch size
-
-    Returns:
-        scalar tf.Tensor: the decayed learning rate
-    """
-
-    learning_rate = tf.train.exponential_decay(
-        PARAMS["learning_rate"],  # Base learning rate.
-        batch * PARAMS["batch_size"],  # Current index into the dataset.
-        PARAMS["decay_step"],  # Decay step.
-        PARAMS["learning_rate_decay_rate"],  # Decay rate.
-        staircase=True,
+    print("start loading test data ...")
+    TEST_DATASET = SemanticDataset(
+        num_points_per_sample=PARAMS["num_point"],
+        split="validation",
+        box_size_x=PARAMS["box_size_x"],
+        box_size_y=PARAMS["box_size_y"],
+        use_color=PARAMS["use_color"],
+        path=PARAMS["data_path"],
+        is_training=False,
     )
-    # CLIP THE LEARNING RATE!
-    learning_rate = tf.maximum(learning_rate, 0.00001)
-    return learning_rate
+    NUM_CLASSES = TRAIN_DATASET.num_classes
 
+    trainDataLoader = torch.utils.data.DataLoader(TRAIN_DATASET, batch_size=PARAMS.batch_size, shuffle=True,    num_workers=10, pin_memory=True, drop_last=True, worker_init_fn=lambda x: np.random.seed(x + int(time.time())))
 
-def get_bn_decay(batch):
-    """Compute the batch normalisation exponential decay
+    testDataLoader = torch.utils.data.DataLoader(TEST_DATASET, batch_size=PARAMS.batch_size , shuffle=False, num_workers=10,
+                                                 pin_memory=True, drop_last=True)
+    weights = torch.Tensor(TRAIN_DATASET.labelweights).cuda()
 
-    Args:
-        batch (tf.Variable): the batch size
+    log_string("The number of training data is: %d" % len(TRAIN_DATASET))
+    log_string("The number of test data is: %d" % len(TEST_DATASET))
 
-    Returns:
-        scalar tf.Tensor: the batch norm decay
-    """
+    '''MODEL LOADING'''
+    MODEL = importlib.import_module(PARAMS.model)
+    shutil.copy('models/%s.py' % PARAMS.model, str(experiment_dir))
+    shutil.copy('models/pointnet2_utils.py', str(experiment_dir))
 
-    bn_momentum = tf.train.exponential_decay(
-        PARAMS["bn_init_decay"],
-        batch * PARAMS["batch_size"],
-        float(PARAMS["decay_step"]),
-        PARAMS["bn_decay_decay_rate"],
-        staircase=True,
-    )
-    bn_decay = tf.minimum(PARAMS["bn_decay_clip"], 1 - bn_momentum)
-    return bn_decay
+    classifier = MODEL.get_model(NUM_CLASSES).cuda()
+    criterion = MODEL.get_loss().cuda()
+    classifier.apply(inplace_relu)
 
+    def weights_init(m):
+        classname = m.__class__.__name__
+        if classname.find('Conv2d') != -1:
+            torch.nn.init.xavier_normal_(m.weight.data)
+            torch.nn.init.constant_(m.bias.data, 0.0)
+        elif classname.find('Linear') != -1:
+            torch.nn.init.xavier_normal_(m.weight.data)
+            torch.nn.init.constant_(m.bias.data, 0.0)
 
-def get_batch(split):
-    np.random.seed()
-    if split == "train":
-        return TRAIN_DATASET.sample_batch_in_all_files(
-            PARAMS["batch_size"], augment=True
+    try:
+        checkpoint = torch.load(str(experiment_dir) + '/checkpoints/best_model.pth')
+        start_epoch = checkpoint['epoch']
+        classifier.load_state_dict(checkpoint['model_state_dict'])
+        log_string('Use pretrain model')
+    except:
+        log_string('No existing model, starting training from scratch...')
+        start_epoch = 0
+        classifier = classifier.apply(weights_init)
+
+    if PARAMS.optimizer == 'Adam':
+        optimizer = torch.optim.Adam(
+            classifier.parameters(),
+            lr=PARAMS.learning_rate,
+            betas=(0.9, 0.999),
+            eps=1e-08,
+            weight_decay=PARAMS.decay_rate
         )
     else:
-        return VALIDATION_DATASET.sample_batch_in_all_files(
-            PARAMS["batch_size"], augment=False
-        )
+        optimizer = torch.optim.SGD(classifier.parameters(), lr=PARAMS.learning_rate, momentum=0.9)
+
+    def bn_momentum_adjust(m, momentum):
+        if isinstance(m, torch.nn.BatchNorm2d) or isinstance(m, torch.nn.BatchNorm1d):
+            m.momentum = momentum
+
+    LEARNING_RATE_CLIP = 1e-5
+    MOMENTUM_ORIGINAL = 0.1
+    MOMENTUM_DECCAY = 0.5
+    MOMENTUM_DECCAY_STEP = PARAMS.step_size
+
+    global_epoch = 0
+    best_iou = 0
+
+    for epoch in range(start_epoch, PARAMS.epoch):
+        '''Train on chopped scenes'''
+        log_string('**** Epoch %d (%d/%s) ****' % (global_epoch + 1, epoch + 1, PARAMS.epoch))
+        lr = max(PARAMS.learning_rate * (PARAMS.lr_decay ** (epoch // PARAMS.step_size)), LEARNING_RATE_CLIP)
+        log_string('Learning rate:%f' % lr)
+        for param_group in optimizer.param_groups:
+            param_group['lr'] = lr
+        momentum = MOMENTUM_ORIGINAL * (MOMENTUM_DECCAY ** (epoch // MOMENTUM_DECCAY_STEP))
+        if momentum < 0.01:
+            momentum = 0.01
+        print('BN momentum updated to: %f' % momentum)
+        classifier = classifier.apply(lambda x: bn_momentum_adjust(x, momentum))
+        num_batches = len(trainDataLoader)
+        total_correct = 0
+        total_seen = 0
+        loss_sum = 0
+        classifier = classifier.train()
+
+        for i, (points, target) in tqdm(enumerate(trainDataLoader), total=len(trainDataLoader), smoothing=0.9):
+            optimizer.zero_grad()
+
+            points = points.data.numpy()
+            points[:, :, :3] = provider.rotate_point_cloud_z(points[:, :, :3])
+            points = torch.Tensor(points)
+            points, target = points.float().cuda(), target.long().cuda()
+            points = points.transpose(2, 1)
+
+            seg_pred, trans_feat = classifier(points)
+            seg_pred = seg_pred.contiguous().view(-1, NUM_CLASSES)
+
+            batch_label = target.view(-1, 1)[:, 0].cpu().data.numpy()
+            target = target.view(-1, 1)[:, 0]
+            loss = criterion(seg_pred, target, trans_feat, weights)
+            loss.backward()
+            optimizer.step()
+
+            pred_choice = seg_pred.cpu().data.max(1)[1].numpy()
+            correct = np.sum(pred_choice == batch_label)
+            total_correct += correct
+            total_seen += (PARAMS.batch_size * PARAMS.num_point)
+            loss_sum += loss
+        log_string('Training mean loss: %f' % (loss_sum / num_batches))
+        log_string('Training accuracy: %f' % (total_correct / float(total_seen)))
+
+        if epoch % 5 == 0:
+            logger.info('Save model...')
+            savepath = str(checkpoints_dir) + '/model.pth'
+            log_string('Saving at %s' % savepath)
+            state = {
+                'epoch': epoch,
+                'model_state_dict': classifier.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+            }
+            torch.save(state, savepath)
+            log_string('Saving model....')
+
+        '''Evaluate on chopped scenes'''
+        with torch.no_grad():
+            num_batches = len(testDataLoader)
+            total_correct = 0
+            total_seen = 0
+            loss_sum = 0
+            labelweights = np.zeros(NUM_CLASSES)
+            total_seen_class = [0 for _ in range(NUM_CLASSES)]
+            total_correct_class = [0 for _ in range(NUM_CLASSES)]
+            total_iou_deno_class = [0 for _ in range(NUM_CLASSES)]
+            classifier = classifier.eval()
+
+            log_string('---- EPOCH %03d EVALUATION ----' % (global_epoch + 1))
+            for i, (points, target) in tqdm(enumerate(testDataLoader), total=len(testDataLoader), smoothing=0.9):
+                points = points.data.numpy()
+                points = torch.Tensor(points)
+                points, target = points.float().cuda(), target.long().cuda()
+                points = points.transpose(2, 1)
+
+                seg_pred, trans_feat = classifier(points)
+                pred_val = seg_pred.contiguous().cpu().data.numpy()
+                seg_pred = seg_pred.contiguous().view(-1, NUM_CLASSES)
+
+                batch_label = target.cpu().data.numpy()
+                target = target.view(-1, 1)[:, 0]
+                loss = criterion(seg_pred, target, trans_feat, weights)
+                loss_sum += loss
+                pred_val = np.argmax(pred_val, 2)
+                correct = np.sum((pred_val == batch_label))
+                total_correct += correct
+                total_seen += (PARAMS.batch_size * PARAMS.num_point)
+                tmp, _ = np.histogram(batch_label, range(NUM_CLASSES + 1))
+                labelweights += tmp
+
+                for l in range(NUM_CLASSES):
+                    total_seen_class[l] += np.sum((batch_label == l))
+                    total_correct_class[l] += np.sum((pred_val == l) & (batch_label == l))
+                    total_iou_deno_class[l] += np.sum(((pred_val == l) | (batch_label == l)))
+
+            labelweights = labelweights.astype(np.float32) / np.sum(labelweights.astype(np.float32))
+            mIoU = np.mean(np.array(total_correct_class) / (np.array(total_iou_deno_class, dtype=np.float) + 1e-6))
+            log_string('eval mean loss: %f' % (loss_sum / float(num_batches)))
+            log_string('eval point avg class IoU: %f' % (mIoU))
+            log_string('eval point accuracy: %f' % (total_correct / float(total_seen)))
+            log_string('eval point avg class acc: %f' % (
+                np.mean(np.array(total_correct_class) / (np.array(total_seen_class, dtype=np.float) + 1e-6))))
+
+            iou_per_class_str = '------- IoU --------\n'
+            for l in range(NUM_CLASSES):
+                iou_per_class_str += 'class %s weight: %.3f, IoU: %.3f \n' % (
+                    seg_label_to_cat[l] + ' ' * (14 - len(seg_label_to_cat[l])), labelweights[l - 1],
+                    total_correct_class[l] / float(total_iou_deno_class[l]))
+
+            log_string(iou_per_class_str)
+            log_string('Eval mean loss: %f' % (loss_sum / num_batches))
+            log_string('Eval accuracy: %f' % (total_correct / float(total_seen)))
+
+            if mIoU >= best_iou:
+                best_iou = mIoU
+                logger.info('Save model...')
+                savepath = str(checkpoints_dir) + '/best_model.pth'
+                log_string('Saving at %s' % savepath)
+                state = {
+                    'epoch': epoch,
+                    'class_avg_iou': mIoU,
+                    'model_state_dict': classifier.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                }
+                torch.save(state, savepath)
+                log_string('Saving model....')
+            log_string('Best mIoU: %f' % best_iou)
+        global_epoch += 1
 
 
-def fill_queues(
-    stack_train, stack_validation, num_train_batches, num_validation_batches
-):
-    """
-    Args:
-        stack_train: mp.Queue to be filled asynchronously
-        stack_validation: mp.Queue to be filled asynchronously
-        num_train_batches: total number of training batches
-        num_validation_batches: total number of validationation batches
-    """
-    pool = mp.Pool(processes=mp.cpu_count())
-    launched_train = 0
-    launched_validation = 0
-    results_train = []  # Temp buffer before filling the stack_train
-    results_validation = []  # Temp buffer before filling the stack_validation
-    # Launch as much as n
-    while True:
-        if stack_train.qsize() + launched_train < num_train_batches:
-            results_train.append(pool.apply_async(get_batch, args=("train",)))
-            launched_train += 1
-        elif stack_validation.qsize() + launched_validation < num_validation_batches:
-            results_validation.append(pool.apply_async(
-                get_batch, args=("validation",)))
-            launched_validation += 1
-        for p in results_train:
-            if p.ready():
-                stack_train.put(p.get())
-                results_train.remove(p)
-                launched_train -= 1
-        for p in results_validation:
-            if p.ready():
-                stack_validation.put(p.get())
-                results_validation.remove(p)
-                launched_validation -= 1
-        # Stability
-        time.sleep(0.01)
-
-
-def init_stacking():
-    """
-    Returns:
-        stacker: mp.Process object
-        stack_validation: mp.Queue, use stack_validation.get() to read a batch
-        stack_train: mp.Queue, use stack_train.get() to read a batch
-    """
-    with tf.device("/cpu:0"):
-        # Queues that contain several batches in advance
-        num_train_batches = TRAIN_DATASET.get_num_batches(PARAMS["batch_size"])
-        num_validation_batches = VALIDATION_DATASET.get_num_batches(
-            PARAMS["batch_size"]
-        )
-        stack_train = mp.Queue(num_train_batches)
-        stack_validation = mp.Queue(num_validation_batches)
-        stacker = mp.Process(
-            target=fill_queues,
-            args=(
-                stack_train,
-                stack_validation,
-                num_train_batches,
-                num_validation_batches,
-            ),
-        )
-        stacker.start()
-        return stacker, stack_validation, stack_train
-
-
-def train_one_epoch(sess, ops, train_writer, stack):
-    """Train one epoch
-
-    Args:
-        sess (tf.Session): the session to evaluate Tensors and ops
-        ops (dict of tf.Operation): contain multiple operation mapped with with strings
-        train_writer (tf.FileSaver): enable to log the training with TensorBoard
-        compute_class_iou (bool): it takes time to compute the iou per class, so you can
-                                  disable it here
-    """
-
-    is_training = True
-
-    num_batches = TRAIN_DATASET.get_num_batches(PARAMS["batch_size"])
-
-    log_string(str(datetime.now()))
-    update_progress(0)
-    # Reset metrics
-    loss_sum = 0
-    confusion_matrix = metric.ConfusionMatrix(NUM_CLASSES)
-
-    # Train over num_batches batches
-    for batch_idx in range(num_batches):
-        # Refill more batches if empty
-        progress = float(batch_idx) / float(num_batches)
-        update_progress(round(progress, 2))
-        batch_data, batch_label, batch_weights = stack.get()
-
-        # Get predicted labels
-        feed_dict = {
-            ops["pointclouds_pl"]: batch_data,
-            ops["labels_pl"]: batch_label,
-            ops["smpws_pl"]: batch_weights,
-            ops["is_training_pl"]: is_training,
-        }
-        summary, step, _, loss_val, pred_val, _ = sess.run(
-            [
-                ops["merged"],
-                ops["step"],
-                ops["train_op"],
-                ops["loss"],
-                ops["pred"],
-                ops["update_iou"],
-            ],
-            feed_dict=feed_dict,
-        )
-        train_writer.add_summary(summary, step)
-        pred_val = np.argmax(pred_val, 2)
-
-        # Update metrics
-        for i in range(len(pred_val)):
-            for j in range(len(pred_val[i])):
-                confusion_matrix.increment(batch_label[i][j], pred_val[i][j])
-        loss_sum += loss_val
-    update_progress(1)
-    log_string("mean loss: %f" % (loss_sum / float(num_batches)))
-    log_string("Overall accuracy : %f" % (confusion_matrix.get_accuracy()))
-    log_string("Average IoU : %f" % (confusion_matrix.get_mean_iou()))
-    iou_per_class = confusion_matrix.get_per_class_ious()
-    iou_per_class = [0] + iou_per_class  # label 0 is ignored
-    for i in range(1, NUM_CLASSES):
-        log_string("IoU of %s : %f" %
-                   (TRAIN_DATASET.labels_names[i], iou_per_class[i]))
-
-
-def eval_one_epoch(sess, ops, validation_writer, stack):
-    """Evaluate one epoch
-
-    Args:
-        sess (tf.Session): the session to evaluate tensors and operations
-        ops (tf.Operation): the dict of operations
-        validation_writer (tf.summary.FileWriter): enable to log the evaluation on TensorBoard
-
-    Returns:
-        float: the overall accuracy computed on the validationation set
-    """
-
-    global EPOCH_CNT
-
-    is_training = False
-
-    num_batches = VALIDATION_DATASET.get_num_batches(PARAMS["batch_size"])
-
-    # Reset metrics
-    loss_sum = 0
-    confusion_matrix = metric.ConfusionMatrix(NUM_CLASSES)
-
-    log_string(str(datetime.now()))
-
-    log_string("---- EPOCH %03d EVALUATION ----" % (EPOCH_CNT))
-
-    update_progress(0)
-
-    for batch_idx in range(num_batches):
-        progress = float(batch_idx) / float(num_batches)
-        update_progress(round(progress, 2))
-        batch_data, batch_label, batch_weights = stack.get()
-
-        feed_dict = {
-            ops["pointclouds_pl"]: batch_data,
-            ops["labels_pl"]: batch_label,
-            ops["smpws_pl"]: batch_weights,
-            ops["is_training_pl"]: is_training,
-        }
-        summary, step, loss_val, pred_val = sess.run(
-            [ops["merged"], ops["step"], ops["loss"],
-                ops["pred"]], feed_dict=feed_dict
-        )
-
-        validation_writer.add_summary(summary, step)
-        pred_val = np.argmax(pred_val, 2)  # BxN
-
-        # Update metrics
-        for i in range(len(pred_val)):
-            for j in range(len(pred_val[i])):
-                confusion_matrix.increment(batch_label[i][j], pred_val[i][j])
-        loss_sum += loss_val
-
-    update_progress(1)
-
-    iou_per_class = confusion_matrix.get_per_class_ious()
-
-    # Display metrics
-    log_string("mean loss: %f" % (loss_sum / float(num_batches)))
-    log_string("Overall accuracy : %f" % (confusion_matrix.get_accuracy()))
-    log_string("Average IoU : %f" % (confusion_matrix.get_mean_iou()))
-    iou_per_class = [0] + iou_per_class  # label 0 is ignored
-    for i in range(1, NUM_CLASSES):
-        log_string(
-            "IoU of %s : %f" % (
-                VALIDATION_DATASET.labels_names[i], iou_per_class[i])
-        )
-
-    EPOCH_CNT += 5
-    return confusion_matrix.get_accuracy()
-
-
-def train():
-    """Train the model on a single GPU
-    """
-    with tf.Graph().as_default():
-        stacker, stack_validation, stack_train = init_stacking()
-
-        with tf.device("/gpu:" + str(PARAMS["gpu"])):
-            pointclouds_pl, labels_pl, smpws_pl = model.get_placeholders(
-                PARAMS["num_point"], hyperparams=PARAMS
-            )
-            is_training_pl = tf.placeholder(tf.bool, shape=())
-
-            # Note the global_step=batch parameter to minimize.
-            # That tells the optimizer to helpfully increment the 'batch' parameter for
-            # you every time it trains.
-            batch = tf.Variable(0)
-            bn_decay = get_bn_decay(batch)
-            tf.summary.scalar("bn_decay", bn_decay)
-
-            print("--- Get model and loss")
-            # Get model and loss
-            pred, end_points = model.get_model(
-                pointclouds_pl,
-                is_training_pl,
-                NUM_CLASSES,
-                hyperparams=PARAMS,
-                bn_decay=bn_decay,
-            )
-            loss = model.get_loss(pred, labels_pl, smpws_pl, end_points)
-            tf.summary.scalar("loss", loss)
-
-            # Compute accuracy
-            correct = tf.equal(tf.argmax(pred, 2), tf.to_int64(labels_pl))
-            accuracy = tf.reduce_sum(tf.cast(correct, tf.float32)) / float(
-                PARAMS["batch_size"] * PARAMS["num_point"]
-            )
-            tf.summary.scalar("accuracy", accuracy)
-
-            # Computer mean intersection over union
-            mean_intersection_over_union, update_iou_op = tf.metrics.mean_iou(
-                tf.to_int32(labels_pl), tf.to_int32(
-                    tf.argmax(pred, 2)), NUM_CLASSES
-            )
-            tf.summary.scalar("mIoU", tf.to_float(
-                mean_intersection_over_union))
-
-            print("--- Get training operator")
-            # Get training operator
-            learning_rate = get_learning_rate(batch)
-            tf.summary.scalar("learning_rate", learning_rate)
-            if PARAMS["optimizer"] == "momentum":
-                optimizer = tf.train.MomentumOptimizer(
-                    learning_rate, momentum=PARAMS["momentum"]
-                )
-            else:
-                assert PARAMS["optimizer"] == "adam"
-                optimizer = tf.train.AdamOptimizer(learning_rate)
-            train_op = optimizer.minimize(loss, global_step=batch)
-
-            # Add ops to save and restore all the variables.
-            saver = tf.train.Saver()
-
-        # Create a session
-        config = tf.ConfigProto()
-        config.gpu_options.allow_growth = True
-        config.allow_soft_placement = True
-        config.log_device_placement = False
-        sess = tf.Session(config=config)
-
-        # Add summary writers
-        merged = tf.summary.merge_all()
-        train_writer = tf.summary.FileWriter(
-            os.path.join(PARAMS["logdir"], "train"), sess.graph
-        )
-        validation_writer = tf.summary.FileWriter(
-            os.path.join(PARAMS["logdir"], "validation"), sess.graph
-        )
-
-        # Init variables
-        sess.run(tf.global_variables_initializer())
-        sess.run(tf.local_variables_initializer())  # important for mIoU
-
-        ops = {
-            "pointclouds_pl": pointclouds_pl,
-            "labels_pl": labels_pl,
-            "smpws_pl": smpws_pl,
-            "is_training_pl": is_training_pl,
-            "pred": pred,
-            "loss": loss,
-            "train_op": train_op,
-            "merged": merged,
-            "step": batch,
-            "end_points": end_points,
-            "update_iou": update_iou_op,
-        }
-
-        # Train for hyper_params["max_epoch"] epochs
-        best_acc = 0
-        for epoch in range(PARAMS["max_epoch"]):
-            print("in epoch", epoch)
-            print("max_epoch", PARAMS["max_epoch"])
-
-            log_string("**** EPOCH %03d ****" % (epoch))
-            sys.stdout.flush()
-
-            # Train one epoch
-            train_one_epoch(sess, ops, train_writer, stack_train)
-
-            # Evaluate, save, and compute the accuracy
-            if epoch % 5 == 0:
-                acc = eval_one_epoch(
-                    sess, ops, validation_writer, stack_validation)
-
-            if acc > best_acc:
-                best_acc = acc
-                save_path = saver.save(
-                    sess,
-                    os.path.join(
-                        PARAMS["logdir"], "best_model_epoch_%03d.ckpt" % (
-                            epoch)
-                    ),
-                )
-                log_string("Model saved in file: %s" % save_path)
-                print("Model saved in file: %s" % save_path)
-
-            # Save the variables to disk.
-            if epoch % 10 == 0:
-                save_path = saver.save(
-                    sess, os.path.join(PARAMS["logdir"], "model.ckpt")
-                )
-                log_string("Model saved in file: %s" % save_path)
-                print("Model saved in file: %s" % save_path)
-
-        # Kill the process, close the file and exit
-        stacker.terminate()
-        LOG_FOUT.close()
-        sys.exit()
-
-
-if __name__ == "__main__":
-    train()
+if __name__ == '__main__':
+    main()
