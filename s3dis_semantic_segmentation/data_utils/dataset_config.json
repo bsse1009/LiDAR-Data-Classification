@@ -1,0 +1,11 @@
+{
+    "logdir": "log",
+    "data_root": "data/s3dis/stanford_indoor3d/",
+    "model": "pointnet2_semantic_seg",
+    "num_point": 4096,
+    "batch_size": 16,
+    "use_color": 1,
+    "num_classes": 13,
+    "block_size": 1.0,
+    "sample_rate": 1.0
+}
