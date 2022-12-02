@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
     def open_file(self):
         fname = QFileDialog.getOpenFileName(
-            self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//DATA', "Point cloud files (*.ply *.txt *.xyz)")
+            self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//DATA', "Point cloud files (*.ply *.txt *.xyz *.pcd *.las *.laz *.obj *.off *.stl *.vtk *.bin *.pts *.csv *.asc *.npy)")
         path = fname[0]
         print(path)
         self.pcd = point_cloud_reader(path)
