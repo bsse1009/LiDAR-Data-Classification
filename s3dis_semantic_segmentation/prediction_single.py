@@ -4,7 +4,7 @@ Date: 15-Nov-2022
 """
 import argparse
 import os
-from data_utils.S3DISDataLoader import ScannetDatasetWholeScene
+from data_utils.S3DISDataLoader import S3DISWholeScene
 from data_utils.indoor3d_util import label2color
 from pointnet2_model.pointnet2_semantic_segmentation import get_model
 import torch
@@ -13,18 +13,14 @@ from pathlib import Path
 import sys
 from tqdm import tqdm
 import numpy as np
+import config
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = BASE_DIR
-sys.path.append(os.path.join(ROOT_DIR, 'models'))
-
-classes = ['ceiling', 'floor', 'wall', 'beam', 'column', 'window', 'door','table', 'chair', 'sofa', 'bookcase', 'board', 'clutter']
-
-class2label = {cls: i for i, cls in enumerate(classes)}
-seg_classes = class2label
-seg_label_to_cat = {}
-for i, cat in enumerate(seg_classes.keys()):
-    seg_label_to_cat[i] = cat
+BASE_DIR = config.BASE_DIR
+ROOT_DIR = config.ROOT_DIR
+classes = config.classes
+class2label = config.class2label
+seg_classes = config.seg_classes
+seg_label_to_cat = config.seg_label_to_cat
 
 
 def parse_args():
@@ -35,10 +31,6 @@ def parse_args():
                         help='batch size in testing [default: 32]')
     parser.add_argument('--gpu', type=str, default='0',
                         help='specify gpu device')
-    parser.add_argument('--num_point', type=int, default=4096,
-                        help='point number [default: 4096]')
-    parser.add_argument('--log_dir', type=str,
-                        required=True, help='experiment root')
     parser.add_argument('--visual', action='store_true',
                         default=False, help='visualize result [default: False]')
     parser.add_argument('--test_area', type=int, default=5,
@@ -66,7 +58,7 @@ def main(args):
         logger.info(str)
         print(str)
 
-    experiment_dir = args.log_dir
+    experiment_dir = config.log_dir
     visual_dir = experiment_dir + '/visual/'
     visual_dir = Path(visual_dir)
     visual_dir.mkdir(exist_ok=True)
@@ -85,12 +77,11 @@ def main(args):
     log_string(args)
     NUM_CLASSES = 13
     BATCH_SIZE = args.batch_size
-    NUM_POINT = args.num_point
+    NUM_POINT = config.NUM_POINT
 
     root = 'data/s3dis/stanford_indoor3d/'
 
-    TEST_DATASET_WHOLE_SCENE = ScannetDatasetWholeScene(
-        root, split='test', test_area=args.test_area, block_points=NUM_POINT)
+    TEST_DATASET_WHOLE_SCENE = S3DISWholeScene(split='test', test_area=args.test_area)
     log_string("The number of test data is: %d" %
                len(TEST_DATASET_WHOLE_SCENE))
 

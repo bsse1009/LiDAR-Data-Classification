@@ -148,15 +148,15 @@ class S3DISWholeScene(Dataset):
         Dataset (Object): Build in pytorch Dataset class which support multi-processing and give 
                         a standard pipeline support for training and testing our models.
     """
-    def __init__(self, split='test', test_area=5, stride=0.5, block_size=1.0, padding=0.001):
+    def __init__(self, split='test', test_area=5, stride=0.5, padding=0.001):
         super().__init__()
         """HYPER PARAMETERS LOADING"""
-        PARAMS = json.loads(open('s3dis_semantic_segmentation/data_utils/dataset_config.json').read())
-        self.num_point = PARAMS.num_point
-        self.block_size = PARAMS.block_size
+        PARAMS = json.loads(open('C:/Users/user/Desktop/SPL3/Project/LiDAR_Classification_APP/s3dis_semantic_segmentation/data_utils/dataset_config.json').read())
+        self.num_point = PARAMS['num_point']
+        self.block_size = PARAMS['block_size']
         self.padding = padding
         self.stride = stride
-        rooms = sorted(os.listdir(PARAMS.data_root))
+        rooms = sorted(os.listdir(PARAMS['data_root']))
         rooms = [room for room in rooms if 'Area_' in room]
 
         assert split in ['train', 'test']
@@ -171,7 +171,7 @@ class S3DISWholeScene(Dataset):
         self.room_coord_min, self.room_coord_max = [], []
 
         for file in self.file_list:
-            data = np.load(PARAMS.data_root + file)
+            data = np.load(PARAMS['data_root'] + file)
             points = data[:, :3]
             self.scene_points_list.append(data[:, :6])
             self.semantic_labels_list.append(data[:, 6])
@@ -181,7 +181,7 @@ class S3DISWholeScene(Dataset):
                 coord_min), self.room_coord_max.append(coord_max)
         assert len(self.scene_points_list) == len(self.semantic_labels_list)
 
-        labelweights = np.zeros(PARAMS.num_classes)
+        labelweights = np.zeros(PARAMS['num_classes'])
         for seg in self.semantic_labels_list:
             tmp, _ = np.histogram(seg, range(14))
             self.scene_points_num.append(seg.shape[0])
