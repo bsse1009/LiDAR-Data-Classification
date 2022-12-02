@@ -3,3 +3,13 @@
 2022-12-01 11:50:10,725 - Model - INFO - The number of test data is: 56
 2022-12-01 11:50:10,805 - Model - INFO - ---- EVALUATION WHOLE SCENE----
 2022-12-01 11:55:47,808 - Model - INFO - Mean IoU of Area_5_hallway_3: 0.7196
+2022-12-02 08:40:36,452 - Model - INFO - PARAMETER ...
+2022-12-02 08:40:36,452 - Model - INFO - Namespace(batch_size=32, file='Area_5_hallway_4.npy', gpu='0', num_votes=3, test_area=5, visual=True)
+2022-12-02 08:41:11,339 - Model - INFO - PARAMETER ...
+2022-12-02 08:41:11,339 - Model - INFO - Namespace(batch_size=32, file='Area_5_hallway_4.npy', gpu='0', num_votes=3, test_area=5, visual=True)
+2022-12-02 08:42:11,742 - Model - INFO - PARAMETER ...
+2022-12-02 08:42:11,742 - Model - INFO - Namespace(batch_size=32, file='Area_5_hallway_4.npy', gpu='0', num_votes=3, test_area=5, visual=True)
+2022-12-02 08:42:22,244 - Model - INFO - PARAMETER ...
+2022-12-02 08:42:22,245 - Model - INFO - Namespace(batch_size=32, file='Area_5_hallway_4.npy', gpu='0', num_votes=3, test_area=5, visual=True)
+2022-12-02 08:42:28,238 - Model - INFO - The number of test data is: 56
+2022-12-02 08:42:28,292 - Model - INFO - ---- EVALUATION WHOLE SCENE----
