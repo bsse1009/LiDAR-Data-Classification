@@ -1,0 +1,5 @@
+2022-12-01 11:50:03,703 - Model - INFO - PARAMETER ...
+2022-12-01 11:50:03,703 - Model - INFO - Namespace(batch_size=32, file='Area_5_hallway_3.npy', gpu='-1', log_dir='log', num_point=4096, num_votes=1, test_area=5, visual=True)
+2022-12-01 11:50:10,725 - Model - INFO - The number of test data is: 56
+2022-12-01 11:50:10,805 - Model - INFO - ---- EVALUATION WHOLE SCENE----
+2022-12-01 11:55:47,808 - Model - INFO - Mean IoU of Area_5_hallway_3: 0.7196

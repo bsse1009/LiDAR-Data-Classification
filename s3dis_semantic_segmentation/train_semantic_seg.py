@@ -45,8 +45,6 @@ def main(args):
     timestr = str(datetime.datetime.now().strftime('%Y-%m-%d_%H-%M'))
     experiment_dir = Path('./log/')
     experiment_dir.mkdir(exist_ok=True)
-    experiment_dir = experiment_dir.joinpath('sem_seg')
-    experiment_dir.mkdir(exist_ok=True)
     if config.log_dir is None:
         experiment_dir = experiment_dir.joinpath(timestr)
     else:
