@@ -9,6 +9,7 @@ __pycache__/
 # Data files
 DATA/
 s3dis_semantic_segmentation/log/
+src/log/
 
 # Distribution / packaging
 .Python
