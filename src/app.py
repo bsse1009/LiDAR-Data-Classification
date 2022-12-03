@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         self.pcd = o3d.geometry.PointCloud()
         self.ui.pushButton.clicked.connect(lambda: self.open_file())
 
-        self.ui.btnClassify.clicked.connect(lambda: self.draw3D())
+        self.ui.btnClassify.clicked.connect(lambda: self.draw())
 
     def open_file(self):
         fname = QFileDialog.getOpenFileName(
@@ -60,7 +60,9 @@ class MainWindow(QMainWindow):
         path = fname[0]
         print(path)
         self.pcd = point_cloud_reader(path)
-        self.view_point_cloud()
+        self.points = self.pcd.points
+        self.colors = self.pcd.colors
+        self.draw_raw()
 
     def view_point_cloud(self):
         o3d.visualization.draw_geometries([self.pcd],
@@ -75,8 +77,13 @@ class MainWindow(QMainWindow):
         x = np.linspace(-8, 8, 50)
         y = np.linspace(-8, 8, 50)
         z = 0.1 * ((x.reshape(50, 1) ** 2) - (y.reshape(1, 50) ** 2))
+        print(x, z)
         p2 = gl.GLSurfacePlotItem(x=x, y=y, z=z, shader='normalColor')
         p2.translate(-10, -10, 0)
+        self.w.addItem(p2)
+
+    def draw_raw(self):
+        p2 = gl.GLScatterPlotItem(pos = self.points, color=(1,1,1,.4), size=0.5)
         self.w.addItem(p2)
 
     def clear(self):
