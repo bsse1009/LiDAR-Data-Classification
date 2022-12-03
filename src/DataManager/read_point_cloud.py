@@ -32,9 +32,9 @@ def point_cloud_reader(path):
         pcd.points = o3d.utility.Vector3dVector(points.astype(np.float))
         pcd.colors = o3d.utility.Vector3dVector(colors.astype(np.float))
     else:
-        point_cloud = np.loadtxt(path)
-        pcd.points = o3d.utility.Vector3dVector(point_cloud[:3])
-        pcd.colors = o3d.utility.Vector3dVector(point_cloud[3:6])
+        point_cloud = np.load(path)
+        pcd.points = o3d.utility.Vector3dVector(point_cloud[:, :3])
+        pcd.colors = o3d.utility.Vector3dVector(point_cloud[:, 3:6])
 
     return pcd
 

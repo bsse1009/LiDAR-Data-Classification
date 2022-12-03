@@ -7,6 +7,7 @@
 ################################################################################
 
 import sys
+import os
 import platform
 import numpy as np
 from PySide6 import QtCore, QtGui, QtWidgets
@@ -16,6 +17,7 @@ from PySide6.QtWidgets import *
 import pyqtgraph.opengl as gl
 import open3d as o3d
 from DataManager.read_point_cloud import point_cloud_reader
+from prediction import predict
 
 # ==> MAIN WINDOW
 from GUI.GUI import Ui_MainWindow
@@ -52,14 +54,16 @@ class MainWindow(QMainWindow):
         self.pcd = o3d.geometry.PointCloud()
         self.ui.pushButton.clicked.connect(lambda: self.open_file())
 
-        self.ui.btnClassify.clicked.connect(lambda: self.draw())
+        self.ui.btnClassify.clicked.connect(lambda: self.prediction())
 
     def open_file(self):
+        self.clear()
         fname = QFileDialog.getOpenFileName(
-            self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//DATA', "Point cloud files (*.ply *.txt *.xyz *.pcd *.las *.laz *.obj *.off *.stl *.vtk *.bin *.pts *.csv *.asc *.npy)")
-        path = fname[0]
-        print(path)
-        self.pcd = point_cloud_reader(path)
+            self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//src//data', "Point cloud files (*.ply *.txt *.xyz *.pcd *.las *.laz *.obj *.off *.stl *.vtk *.bin *.pts *.csv *.asc *.npy)")
+        self.path = fname[0]
+        self.file = self.path.strip().split('/')[-1]
+        print(self.path)
+        self.pcd = point_cloud_reader(self.path)
         self.points = self.pcd.points
         self.colors = self.pcd.colors
         self.draw_raw()
@@ -83,11 +87,27 @@ class MainWindow(QMainWindow):
         self.w.addItem(p2)
 
     def draw_raw(self):
+        self.clear()
         p2 = gl.GLScatterPlotItem(pos = self.points, color=(1,1,1,.4), size=0.5)
         self.w.addItem(p2)
 
+    def prediction(self):
+        if self.has_predictions():
+            print("Predictions are available")
+        else:
+            predict({"file": self.file, "num_votes": 1, "test_area": 5, "visual": True})
+
+    def has_predictions(self):
+        dirs = os.listdir('log/visual')
+        f = self.file.split('.')[0]+'_pred.obj'
+        print(f)
+        if  f in dirs:
+            return True
+        return False
+
+
     def clear(self):
-        self.ui.graphicsView.clear()
+        self.w1.clear()
 
 
 # SPLASH SCREEN
