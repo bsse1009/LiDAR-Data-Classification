@@ -1,5 +1,6 @@
 import open3d as o3d
 import numpy as np
+import os
 # import laspy as las
 # import lidario as lio
 
@@ -26,11 +27,12 @@ def point_cloud_reader(path):
     #     pcd.points = o3d.utility.Vector3dVector(point_cloud)
     elif extension == "obj":
         data = open(path, "r")
+        print(os.path.exists(path))
         lines = data.readlines()
         points = np.array([line.strip().split()[1:4] for line in lines if line[0] == "v"])
         colors = np.array([line.strip().split()[4:7] for line in lines if line[0] == "v"])
-        pcd.points = o3d.utility.Vector3dVector(points.astype(np.float))
-        pcd.colors = o3d.utility.Vector3dVector(colors.astype(np.float))
+        pcd.points = o3d.utility.Vector3dVector(points.astype(np.float32))
+        pcd.colors = o3d.utility.Vector3dVector(colors.astype(np.float32))
     else:
         point_cloud = np.load(path)
         pcd.points = o3d.utility.Vector3dVector(point_cloud[:, :3])

@@ -536,7 +536,7 @@ QToolTip {
     <string notr="true">background: transparent;
 color: rgb(210, 210, 210);</string>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="leftMargin">
      <number>10</number>
     </property>
@@ -824,6 +824,12 @@ QSlider::handle:vertical:pressed {
           </property>
           <item>
            <widget class="QFrame" name="frame_toggle">
+            <property name="minimumSize">
+             <size>
+              <width>110</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>70</width>
@@ -888,6 +894,12 @@ QPushButton:pressed {
           </item>
           <item>
            <widget class="QFrame" name="frame_top_right">
+            <property name="minimumSize">
+             <size>
+              <width>850</width>
+              <height>65</height>
+             </size>
+            </property>
             <property name="styleSheet">
              <string notr="true">background: transparent;</string>
             </property>
@@ -976,29 +988,6 @@ QPushButton:pressed {
                    <property name="bottomMargin">
                     <number>0</number>
                    </property>
-                   <item>
-                    <widget class="QFrame" name="frame_icon_top_bar">
-                     <property name="maximumSize">
-                      <size>
-                       <width>30</width>
-                       <height>30</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">background: transparent;
-background-image: url(:/16x16/icons/16x16/cil-terminal.png);
-background-position: center;
-background-repeat: no-repeat;
-</string>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                    </widget>
-                   </item>
                    <item>
                     <widget class="QLabel" name="label_title_bar_top">
                      <property name="font">
@@ -1096,7 +1085,7 @@ QPushButton:pressed {
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset>
+                      <iconset resource="files.qrc">
                        <normaloff>:/16x16/icons/16x16/cil-window-minimize.png</normaloff>:/16x16/icons/16x16/cil-window-minimize.png</iconset>
                      </property>
                     </widget>
@@ -1140,7 +1129,7 @@ QPushButton:pressed {
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset>
+                      <iconset resource="files.qrc">
                        <normaloff>:/16x16/icons/16x16/cil-window-maximize.png</normaloff>:/16x16/icons/16x16/cil-window-maximize.png</iconset>
                      </property>
                     </widget>
@@ -1184,7 +1173,7 @@ QPushButton:pressed {
                       <string/>
                      </property>
                      <property name="icon">
-                      <iconset>
+                      <iconset resource="files.qrc">
                        <normaloff>:/16x16/icons/16x16/cil-x.png</normaloff>:/16x16/icons/16x16/cil-x.png</iconset>
                      </property>
                     </widget>
@@ -1284,7 +1273,7 @@ QPushButton:pressed {
                    <string>Open LiDAR</string>
                   </property>
                   <property name="icon">
-                   <iconset>
+                   <iconset resource="files.qrc">
                     <normaloff>:/16x16/icons/16x16/cil-folder-open.png</normaloff>:/16x16/icons/16x16/cil-folder-open.png</iconset>
                   </property>
                  </widget>
@@ -1363,7 +1352,7 @@ QPushButton:pressed {
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
+          <item alignment="Qt::AlignHCenter">
            <widget class="QFrame" name="frame_left_menu">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1373,7 +1362,7 @@ QPushButton:pressed {
             </property>
             <property name="minimumSize">
              <size>
-              <width>70</width>
+              <width>110</width>
               <height>0</height>
              </size>
             </property>
@@ -1395,69 +1384,29 @@ QPushButton:pressed {
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QGridLayout" name="gridLayout">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0" alignment="Qt::AlignTop">
-              <widget class="QFrame" name="frame_menus">
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QPushButton" name="btnHome">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
                <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QVBoxLayout" name="layout_menus">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QPushButton" name="btnClassify">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <pointsize>9</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="layoutDirection">
-                   <enum>Qt::LeftToRight</enum>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QPushButton {
-	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
-	// background-image:url(:/16x16/icons/16x16/cil-home.png);
-	background-position: left;
+                <string notr="true">QPushButton {
+	background-image:url(:/16x16/icons/16x16/cil-home.png);
+	background-position: bottom;
 	background-repeat: no-reperat;
 	background-color: rgb(52, 59, 72);
 	border: 2px solid rgb(52, 59, 72);
@@ -1469,89 +1418,231 @@ QPushButton:hover {
 QPushButton:pressed {	
 	background-color: rgb(85, 170, 255);
 }</string>
-                  </property>
-                  <property name="text">
-                   <string>Classify</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
               </widget>
              </item>
-             <item row="2" column="0" alignment="Qt::AlignBottom">
-              <widget class="QFrame" name="frame_extra_menus">
+             <item>
+              <widget class="QPushButton" name="btnClassify">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	// background-image:url(:/16x16/icons/16x16/cil-home.png);
+	background-position: left;
+	background-repeat: no-reperat;
+	background-color: rgb(52, 59, 72);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QPushButton:hover {
+	background-color: rgb(33, 37, 43);
+}
+QPushButton:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Classify</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnSeg">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	// background-image:url(:/16x16/icons/16x16/cil-home.png);
+	background-position: left;
+	background-repeat: no-reperat;
+	background-color: rgb(52, 59, 72);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QPushButton:hover {
+	background-color: rgb(33, 37, 43);
+}
+QPushButton:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Segmentation</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnFilter">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	// background-image:url(:/16x16/icons/16x16/cil-home.png);
+	background-position: left;
+	background-repeat: no-reperat;
+	background-color: rgb(52, 59, 72);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QPushButton:hover {
+	background-color: rgb(33, 37, 43);
+}
+QPushButton:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Filter</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnLog">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="layoutDirection">
+                <enum>Qt::LeftToRight</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	// background-image:url(:/16x16/icons/16x16/cil-home.png);
+	background-position: left;
+	background-repeat: no-reperat;
+	background-color: rgb(52, 59, 72);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QPushButton:hover {
+	background-color: rgb(33, 37, 43);
+}
+QPushButton:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Log</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>60</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_user_icon">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="frameShape">
-                <enum>QFrame::NoFrame</enum>
+               <property name="minimumSize">
+                <size>
+                 <width>60</width>
+                 <height>60</height>
+                </size>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
+               <property name="maximumSize">
+                <size>
+                 <width>1000</width>
+                 <height>10000</height>
+                </size>
                </property>
-               <layout class="QVBoxLayout" name="layout_menu_bottom">
-                <property name="spacing">
-                 <number>10</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>25</number>
-                </property>
-                <item alignment="Qt::AlignHCenter">
-                 <widget class="QLabel" name="label_user_icon">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>60</width>
-                    <height>60</height>
-                   </size>
-                  </property>
-                  <property name="font">
-                   <font>
-                    <family>Segoe UI</family>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLabel {
+               <property name="font">
+                <font>
+                 <family>Segoe UI</family>
+                 <pointsize>12</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+	background-image: url(:/16x16/icons/16x16/cil-user.png);
 	border-radius: 30px;
 	background-color: rgb(44, 49, 60);
 	border: 5px solid rgb(39, 44, 54);
 	background-position: center;
 	background-repeat: no-repeat;
 }</string>
-                  </property>
-                  <property name="text">
-                   <string>WM</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
               </widget>
              </item>
             </layout>
@@ -1559,6 +1650,12 @@ QPushButton:pressed {
           </item>
           <item>
            <widget class="QFrame" name="frame_content_right">
+            <property name="minimumSize">
+             <size>
+              <width>850</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="styleSheet">
              <string notr="true">background-color: rgb(44, 49, 60);</string>
             </property>
@@ -1610,17 +1707,534 @@ QPushButton:pressed {
                 </property>
                 <item>
                  <widget class="QStackedWidget" name="stackedWidget">
-                  <property name="styleSheet">
-                   <string notr="true">background: transparent;</string>
-                  </property>
-                  <property name="currentIndex">
-                   <number>0</number>
-                  </property>
-                  <widget class="QWidget" name="display_page">
-                   <layout class="QVBoxLayout" name="verticalLayout_10"/>
+                  <widget class="QWidget" name="diplay_page">
+                   <layout class="QVBoxLayout" name="verticalLayout_13">
+                    <item>
+                     <widget class="QOpenGLWidget" name="openGLWidget"/>
+                    </item>
+                   </layout>
                   </widget>
-                  <widget class="QWidget" name="classification_page">
-                   <layout class="QVBoxLayout" name="verticalLayout_7"/>
+                  <widget class="QWidget" name="log_page">
+                   <layout class="QVBoxLayout" name="verticalLayout_5">
+                    <item>
+                     <widget class="QGroupBox" name="groupBox">
+                      <property name="layoutDirection">
+                       <enum>Qt::LeftToRight</enum>
+                      </property>
+                      <property name="title">
+                       <string>Log Page</string>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_7">
+                       <item>
+                        <widget class="QListWidget" name="listWidget">
+                         <item>
+                          <property name="text">
+                           <string>Log will display here</string>
+                          </property>
+                         </item>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="home_page">
+                   <layout class="QVBoxLayout" name="verticalLayout_8">
+                    <item>
+                     <widget class="QLabel" name="label">
+                      <property name="text">
+                       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; color:#16a0ff;&quot;&gt;LiDAR Point Cloud Classifier&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#8590c8;&quot;&gt;A GUI Application for Classifying and segmenting large scale &lt;/span&gt;&lt;a href=&quot;https://becominghuman.ai/whats-lidar-and-what-s-3d-point-cloud-1f4ccd998e7b/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;LiDAR Point Cloud&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#8590c8;&quot;&gt; files. We can also Display and Save the Classified point Cloud objects in a efficient way by this app. The application created using &lt;/span&gt;&lt;a href=&quot;https://www.python.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;Python&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#8590c8;&quot;&gt; and &lt;/span&gt;&lt;a href=&quot;https://pypi.org/project/PySide6/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;PySide6&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#8590c8;&quot;&gt;, &lt;/span&gt;&lt;a href=&quot;https://pytorch.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;Pytorch&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#8590c8;&quot;&gt;,&lt;/span&gt;&lt;a href=&quot;http://www.open3d.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;Open3D&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#8590c8;&quot;&gt;MIT License&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#16a0ff;&quot;&gt;Created by: &lt;/span&gt;&lt;a href=&quot;https://github.com/bsse1009&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;bsse1009@iit.du.ac.bd&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; color:#16a0ff;&quot;&gt; @GitHub&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;https://github.com/bsse1009/LiDAR-Data-Classification&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;GitHub Repository&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;https://github.com/bsse1009/LiDAR-Data-Classification&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;Releases&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;a href=&quot;https://github.com/bsse1009/LiDAR-Data-Classification/issues/new&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0264af;&quot;&gt;Report an issue&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </string>
+                      </property>
+                      <property name="textFormat">
+                       <enum>Qt::AutoText</enum>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                      </property>
+                      <property name="wordWrap">
+                       <bool>true</bool>
+                      </property>
+                      <property name="margin">
+                       <number>25</number>
+                      </property>
+                      <property name="openExternalLinks">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="filter_page">
+                   <layout class="QVBoxLayout" name="verticalLayout_9">
+                    <item>
+                     <widget class="QWidget" name="widget" native="true">
+                      <property name="font">
+                       <font>
+                        <weight>50</weight>
+                        <italic>false</italic>
+                        <bold>false</bold>
+                       </font>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_14">
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_12">
+                         <item>
+                          <widget class="QSplitter" name="splitter">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                           <widget class="QWidget" name="">
+                            <layout class="QVBoxLayout" name="verticalLayout_10">
+                             <item>
+                              <widget class="QCheckBox" name="checkBox">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>Ceiling</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_2">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>floor</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_6">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>wall</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_7">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>beam</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_3">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>column</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_8">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>window</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_5">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>door</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                           <widget class="QWidget" name="">
+                            <layout class="QVBoxLayout" name="verticalLayout_11">
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_4">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>table</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_10">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>chair</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_9">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>sofa</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_11">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>board</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_13">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>bookcase</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QCheckBox" name="checkBox_12">
+                               <property name="font">
+                                <font>
+                                 <family>MS Shell Dlg 2</family>
+                                 <pointsize>10</pointsize>
+                                 <weight>6</weight>
+                                 <italic>false</italic>
+                                 <bold>false</bold>
+                                </font>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QCheckBox {
+	font: 50 10pt &quot;MS Shell Dlg 2&quot;;
+	background-color: rgb(0, 85, 127);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QCheckBox:hover {
+	background-color: rgb(33, 37, 43);
+}
+QCheckBox:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                               </property>
+                               <property name="text">
+                                <string>clutter</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QPushButton" name="pushButton_2">
+                           <property name="font">
+                            <font>
+                             <pointsize>9</pointsize>
+                             <weight>75</weight>
+                             <bold>true</bold>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QPushButton {
+	font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+	// background-image:url(:/16x16/icons/16x16/cil-home.png);
+	background-position: left;
+	background-repeat: no-reperat;
+	background-color: rgb(52, 59, 72);
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;
+	padding: 1em;
+}
+QPushButton:hover {
+	background-color: rgb(33, 37, 43);
+}
+QPushButton:pressed {	
+	background-color: rgb(85, 170, 255);
+}</string>
+                           </property>
+                           <property name="text">
+                            <string>Filter</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
                   </widget>
                  </widget>
                 </item>
@@ -1754,7 +2368,7 @@ QPushButton:pressed {
   <tabstop>btn_toggle_menu</tabstop>
  </tabstops>
  <resources>
-  <include location="../Simple_PySide_Base-master/files.qrc"/>
+  <include location="files.qrc"/>
  </resources>
  <connections/>
 </ui>

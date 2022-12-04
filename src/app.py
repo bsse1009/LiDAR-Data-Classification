@@ -37,13 +37,13 @@ class MainWindow(QMainWindow):
         self.w = gl.GLViewWidget()
         self.w.setWindowTitle('pyqtgraph example: GLSurfacePlot')
         self.w.setCameraPosition(distance=50)
-
+        self.res_dir = 'log/visual'
         self.w1 = gl.GLViewWidget()
         self.w1.setCameraPosition(distance=50)
 
-        self.ui.display_layout.addWidget(self.w)
-        self.ui.classification_layout.addWidget(self.w1)
-        self.ui.stackedWidget.setCurrentWidget(self.ui.display_page)
+        self.ui.verticalLayout_13.addWidget(self.w)
+        # self.ui.classification_layout.addWidget(self.w1)
+        # self.ui.stackedWidget.setCurrentWidget(self.ui.display_page)
         # Add a grid to the view
         self.g = gl.GLGridItem()
         self.g.scale(2, 2, 1)
@@ -53,8 +53,19 @@ class MainWindow(QMainWindow):
         self.w1.addItem(self.g)
         self.pcd = o3d.geometry.PointCloud()
         self.ui.pushButton.clicked.connect(lambda: self.open_file())
+        self.ui.btnSeg.clicked.connect(lambda: self.prediction())
+        self.ui.btnClassify.clicked.connect(self.buttonClick)
 
-        self.ui.btnClassify.clicked.connect(lambda: self.prediction())
+
+        self.ui.pushButton_2.clicked.connect(self.buttonClick)
+        self.ui.btn_toggle_menu.clicked.connect(self.buttonClick)
+        self.ui.btn_minimize.clicked.connect(self.buttonClick)
+        self.ui.btn_maximize_restore.clicked.connect(self.buttonClick)
+        self.ui.btn_close.clicked.connect(self.buttonClick)
+        self.ui.btnHome.clicked.connect(self.buttonClick)
+        self.ui.btnDisplay.clicked.connect(self.buttonClick)
+        self.ui.btnFilter.clicked.connect(self.buttonClick)
+        self.ui.btnLog.clicked.connect(self.buttonClick)
 
     def open_file(self):
         self.clear()
@@ -68,13 +79,51 @@ class MainWindow(QMainWindow):
         self.colors = self.pcd.colors
         self.draw_raw()
 
-    def view_point_cloud(self):
-        o3d.visualization.draw_geometries([self.pcd],
-                                          width=1850,
-                                          height=920,
-                                          #   left=10,
-                                          #   top=10
-                                          )
+    def buttonClick(self):
+        btn = self.sender()
+        btnName = btn.objectName()
+
+        if btnName == "btn_toggle_menu":
+            pass
+
+        elif btnName == "btn_minimize":
+            pass
+
+        if btnName == "btn_maximize_restore":
+            pass
+
+        if btnName == "btn_close":
+            pass
+
+        if btnName == "btnHome":
+            self.ui.stackedWidget.setCurrentWidget(self.ui.home_page)
+        
+        elif btnName == "btnFilter":
+            self.ui.stackedWidget.setCurrentWidget(self.ui.filter_page)
+
+        elif btnName == "btnLog":
+            self.ui.stackedWidget.setCurrentWidget(self.ui.log_page)
+
+        elif btnName == "pushButton_2":
+            pass
+
+        elif btnName == "btnDisplay":
+            self.ui.stackedWidget.setCurrentWidget(self.ui.diplay_page)
+
+    def view_point_cloud(self, pcd_list):
+        def rotate_view(vis):
+            ctr = vis.get_view_control()
+            ctr.rotate(10.0, 0.0)
+            return False
+        def change_background_to_black(vis):
+            opt = vis.get_render_option()
+            opt.background_color = np.asarray([0, 0, 0])
+            return False
+        key_to_callback = {}
+        key_to_callback[ord("K")] = change_background_to_black
+        key_to_callback[ord("R")] = rotate_view
+
+        o3d.visualization.draw_geometries_with_key_callbacks(pcd_list, key_to_callback)
 
     def draw3D(self):
         # self.ui.stackedWidget.setCurrentWidget(self.ui.classification_page)
@@ -96,14 +145,26 @@ class MainWindow(QMainWindow):
             print("Predictions are available")
         else:
             predict({"file": self.file, "num_votes": 1, "test_area": 5, "visual": True})
+        self.display_results()
+        
 
     def has_predictions(self):
-        dirs = os.listdir('log/visual')
+        dirs = os.listdir(self.res_dir)
         f = self.file.split('.')[0]+'_pred.obj'
         print(f)
         if  f in dirs:
             return True
         return False
+
+    def display_results(self):
+        pred_f = os.path.join(self.res_dir, self.file.split('.')[0]+'_pred.obj')
+        gt_f = os.path.join(self.res_dir,self.file.split('.')[0]+'_gt.obj')
+        pcd_pred = point_cloud_reader(pred_f)
+        pcd_gt = point_cloud_reader(gt_f)
+        points = np.asarray(pcd_pred.points)
+        points += [10, 10, 0]
+        pcd_pred.points = o3d.utility.Vector3dVector(points)
+        self.view_point_cloud([pcd_gt, pcd_pred])
 
 
     def clear(self):
