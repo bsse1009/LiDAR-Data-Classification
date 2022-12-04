@@ -23,21 +23,6 @@ seg_classes = config.seg_classes
 seg_label_to_cat = config.seg_label_to_cat
 
 
-# def parse_args():
-#     '''PARAMETERS'''
-#     parser = argparse.ArgumentParser('Model')
-
-#     parser.add_argument('--visual', action='store_true',
-#                         default=False, help='visualize result [default: False]')
-#     parser.add_argument('--test_area', type=int, default=5,
-#                         help='area for testing, option: 1-6 [default: 5]')
-#     parser.add_argument('--file', type=str, default='Area_5_office_10.npy',
-#                         help='file_name for testing')
-#     parser.add_argument('--num_votes', type=int, default=3,
-#                         help='aggregate segmentation scores with voting [default: 5]')
-#     return parser.parse_args()
-
-
 def add_vote(vote_label_pool, point_idx, pred_label, weight):
     B = pred_label.shape[0]
     N = pred_label.shape[1]
@@ -174,6 +159,8 @@ def predict(args):
         for i in range(whole_scene_label.shape[0]):
             color = label2color[pred_label[i]]
             color_gt = label2color[whole_scene_label[i]]
+            if args["no_wall"] and ((whole_scene_label[i] == 2) or (whole_scene_label[i] == 0)):
+                continue
             if args["visual"]:
                 fout.write('v %f %f %f %d %d %d\n' % (
                     whole_scene_data[i, 0], whole_scene_data[i,

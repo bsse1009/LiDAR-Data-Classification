@@ -885,15 +885,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_10 = QVBoxLayout(self.widget1)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
         self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.checkBox = QCheckBox(self.widget1)
-        self.checkBox.setObjectName(u"checkBox")
+        self.ceiling = QCheckBox(self.widget1)
+        self.ceiling.setObjectName(u"ceiling")
         font8 = QFont()
         font8.setFamilies([u"MS Shell Dlg 2"])
         font8.setPointSize(10)
         font8.setBold(False)
         font8.setItalic(False)
-        self.checkBox.setFont(font8)
-        self.checkBox.setStyleSheet(u"QCheckBox {\n"
+        self.ceiling.setFont(font8)
+        self.ceiling.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -907,12 +907,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox)
+        self.verticalLayout_10.addWidget(self.ceiling)
 
-        self.checkBox_2 = QCheckBox(self.widget1)
-        self.checkBox_2.setObjectName(u"checkBox_2")
-        self.checkBox_2.setFont(font8)
-        self.checkBox_2.setStyleSheet(u"QCheckBox {\n"
+        self.floor = QCheckBox(self.widget1)
+        self.floor.setObjectName(u"floor")
+        self.floor.setFont(font8)
+        self.floor.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -926,12 +926,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox_2)
+        self.verticalLayout_10.addWidget(self.floor)
 
-        self.checkBox_6 = QCheckBox(self.widget1)
-        self.checkBox_6.setObjectName(u"checkBox_6")
-        self.checkBox_6.setFont(font8)
-        self.checkBox_6.setStyleSheet(u"QCheckBox {\n"
+        self.wall = QCheckBox(self.widget1)
+        self.wall.setObjectName(u"wall")
+        self.wall.setFont(font8)
+        self.wall.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -945,12 +945,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox_6)
+        self.verticalLayout_10.addWidget(self.wall)
 
-        self.checkBox_7 = QCheckBox(self.widget1)
-        self.checkBox_7.setObjectName(u"checkBox_7")
-        self.checkBox_7.setFont(font8)
-        self.checkBox_7.setStyleSheet(u"QCheckBox {\n"
+        self.beam = QCheckBox(self.widget1)
+        self.beam.setObjectName(u"beam")
+        self.beam.setFont(font8)
+        self.beam.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -964,12 +964,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox_7)
+        self.verticalLayout_10.addWidget(self.beam)
 
-        self.checkBox_3 = QCheckBox(self.widget1)
-        self.checkBox_3.setObjectName(u"checkBox_3")
-        self.checkBox_3.setFont(font8)
-        self.checkBox_3.setStyleSheet(u"QCheckBox {\n"
+        self.column = QCheckBox(self.widget1)
+        self.column.setObjectName(u"column")
+        self.column.setFont(font8)
+        self.column.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -983,12 +983,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox_3)
+        self.verticalLayout_10.addWidget(self.column)
 
-        self.checkBox_8 = QCheckBox(self.widget1)
-        self.checkBox_8.setObjectName(u"checkBox_8")
-        self.checkBox_8.setFont(font8)
-        self.checkBox_8.setStyleSheet(u"QCheckBox {\n"
+        self.window = QCheckBox(self.widget1)
+        self.window.setObjectName(u"window")
+        self.window.setFont(font8)
+        self.window.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1002,12 +1002,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox_8)
+        self.verticalLayout_10.addWidget(self.window)
 
-        self.checkBox_5 = QCheckBox(self.widget1)
-        self.checkBox_5.setObjectName(u"checkBox_5")
-        self.checkBox_5.setFont(font8)
-        self.checkBox_5.setStyleSheet(u"QCheckBox {\n"
+        self.door = QCheckBox(self.widget1)
+        self.door.setObjectName(u"door")
+        self.door.setFont(font8)
+        self.door.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1021,7 +1021,7 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_10.addWidget(self.checkBox_5)
+        self.verticalLayout_10.addWidget(self.door)
 
         self.splitter.addWidget(self.widget1)
         self.widget2 = QWidget(self.splitter)
@@ -1029,10 +1029,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_11 = QVBoxLayout(self.widget2)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.checkBox_4 = QCheckBox(self.widget2)
-        self.checkBox_4.setObjectName(u"checkBox_4")
-        self.checkBox_4.setFont(font8)
-        self.checkBox_4.setStyleSheet(u"QCheckBox {\n"
+        self.table = QCheckBox(self.widget2)
+        self.table.setObjectName(u"table")
+        self.table.setFont(font8)
+        self.table.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1046,12 +1046,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_11.addWidget(self.checkBox_4)
+        self.verticalLayout_11.addWidget(self.table)
 
-        self.checkBox_10 = QCheckBox(self.widget2)
-        self.checkBox_10.setObjectName(u"checkBox_10")
-        self.checkBox_10.setFont(font8)
-        self.checkBox_10.setStyleSheet(u"QCheckBox {\n"
+        self.chair = QCheckBox(self.widget2)
+        self.chair.setObjectName(u"chair")
+        self.chair.setFont(font8)
+        self.chair.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1065,12 +1065,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_11.addWidget(self.checkBox_10)
+        self.verticalLayout_11.addWidget(self.chair)
 
-        self.checkBox_9 = QCheckBox(self.widget2)
-        self.checkBox_9.setObjectName(u"checkBox_9")
-        self.checkBox_9.setFont(font8)
-        self.checkBox_9.setStyleSheet(u"QCheckBox {\n"
+        self.sofa = QCheckBox(self.widget2)
+        self.sofa.setObjectName(u"sofa")
+        self.sofa.setFont(font8)
+        self.sofa.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1084,12 +1084,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_11.addWidget(self.checkBox_9)
+        self.verticalLayout_11.addWidget(self.sofa)
 
-        self.checkBox_11 = QCheckBox(self.widget2)
-        self.checkBox_11.setObjectName(u"checkBox_11")
-        self.checkBox_11.setFont(font8)
-        self.checkBox_11.setStyleSheet(u"QCheckBox {\n"
+        self.board = QCheckBox(self.widget2)
+        self.board.setObjectName(u"board")
+        self.board.setFont(font8)
+        self.board.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1103,12 +1103,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_11.addWidget(self.checkBox_11)
+        self.verticalLayout_11.addWidget(self.board)
 
-        self.checkBox_13 = QCheckBox(self.widget2)
-        self.checkBox_13.setObjectName(u"checkBox_13")
-        self.checkBox_13.setFont(font8)
-        self.checkBox_13.setStyleSheet(u"QCheckBox {\n"
+        self.bookcase = QCheckBox(self.widget2)
+        self.bookcase.setObjectName(u"bookcase")
+        self.bookcase.setFont(font8)
+        self.bookcase.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1122,12 +1122,12 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_11.addWidget(self.checkBox_13)
+        self.verticalLayout_11.addWidget(self.bookcase)
 
-        self.checkBox_12 = QCheckBox(self.widget2)
-        self.checkBox_12.setObjectName(u"checkBox_12")
-        self.checkBox_12.setFont(font8)
-        self.checkBox_12.setStyleSheet(u"QCheckBox {\n"
+        self.clutter = QCheckBox(self.widget2)
+        self.clutter.setObjectName(u"clutter")
+        self.clutter.setFont(font8)
+        self.clutter.setStyleSheet(u"QCheckBox {\n"
 "	font: 50 10pt \"MS Shell Dlg 2\";\n"
 "	background-color: rgb(0, 85, 127);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -1141,7 +1141,7 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.verticalLayout_11.addWidget(self.checkBox_12)
+        self.verticalLayout_11.addWidget(self.clutter)
 
         self.splitter.addWidget(self.widget2)
 
@@ -1282,19 +1282,19 @@ class Ui_MainWindow(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#16a0ff;\">LiDAR Point Cloud Classifier</span></p><p align=\"center\"><span style=\" color:#8590c8;\">A GUI Application for Classifying and segmenting large scale </span><a href=\"https://becominghuman.ai/whats-lidar-and-what-s-3d-point-cloud-1f4ccd998e7b/\"><span style=\" text-decoration: underline; color:#0264af;\">LiDAR Point Cloud</span></a><span style=\" color:#8590c8;\"> files. We can also Display and Save the Classified point Cloud objects in a efficient way by this app. The application created using </span><a href=\"https://www.python.org/\"><span style=\" text-decoration: underline; color:#0264af;\">Python</span></a><span style=\" color:#8590c8;\"> and </span><a href=\"https://pypi.org/project/PySide6/\"><span style=\" text-decoration: underline; color:#0264af;\">PySide6</span></a><span style=\" color:#8590c8;\">, </span><a href=\"https://pytorch.org/\"><span style=\" text-decoration: underline; color:#0264af;\">Pytorch</span>"
                         "</a><span style=\" color:#8590c8;\">,</span><a href=\"http://www.open3d.org/\"><span style=\" text-decoration: underline; color:#0264af;\">Open3D</span></a></p><p align=\"center\"><span style=\" color:#8590c8;\">MIT License</span></p><p align=\"center\"><span style=\" color:#16a0ff;\">Created by: </span><a href=\"https://github.com/bsse1009\"><span style=\" text-decoration: underline; color:#0264af;\">bsse1009@iit.du.ac.bd</span></a><span style=\" color:#16a0ff;\"> @GitHub</span></p><p align=\"center\"><br/></p><p align=\"right\"><a href=\"https://github.com/bsse1009/LiDAR-Data-Classification\"><span style=\" text-decoration: underline; color:#0264af;\">GitHub Repository</span></a></p><p align=\"right\"><a href=\"https://github.com/bsse1009/LiDAR-Data-Classification\"><span style=\" text-decoration: underline; color:#0264af;\">Releases</span></a></p><p align=\"right\"><a href=\"https://github.com/bsse1009/LiDAR-Data-Classification/issues/new\"><span style=\" text-decoration: underline; color:#0264af;\">Report "
                         "an issue</span></a></p><p align=\"right\"><br/></p><p align=\"center\"><br/></p></body></html> ", None))
-        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Ceiling", None))
-        self.checkBox_2.setText(QCoreApplication.translate("MainWindow", u"floor", None))
-        self.checkBox_6.setText(QCoreApplication.translate("MainWindow", u"wall", None))
-        self.checkBox_7.setText(QCoreApplication.translate("MainWindow", u"beam", None))
-        self.checkBox_3.setText(QCoreApplication.translate("MainWindow", u"column", None))
-        self.checkBox_8.setText(QCoreApplication.translate("MainWindow", u"window", None))
-        self.checkBox_5.setText(QCoreApplication.translate("MainWindow", u"door", None))
-        self.checkBox_4.setText(QCoreApplication.translate("MainWindow", u"table", None))
-        self.checkBox_10.setText(QCoreApplication.translate("MainWindow", u"chair", None))
-        self.checkBox_9.setText(QCoreApplication.translate("MainWindow", u"sofa", None))
-        self.checkBox_11.setText(QCoreApplication.translate("MainWindow", u"board", None))
-        self.checkBox_13.setText(QCoreApplication.translate("MainWindow", u"bookcase", None))
-        self.checkBox_12.setText(QCoreApplication.translate("MainWindow", u"clutter", None))
+        self.ceiling.setText(QCoreApplication.translate("MainWindow", u"Ceiling", None))
+        self.floor.setText(QCoreApplication.translate("MainWindow", u"floor", None))
+        self.wall.setText(QCoreApplication.translate("MainWindow", u"wall", None))
+        self.beam.setText(QCoreApplication.translate("MainWindow", u"beam", None))
+        self.column.setText(QCoreApplication.translate("MainWindow", u"column", None))
+        self.window.setText(QCoreApplication.translate("MainWindow", u"window", None))
+        self.door.setText(QCoreApplication.translate("MainWindow", u"door", None))
+        self.table.setText(QCoreApplication.translate("MainWindow", u"table", None))
+        self.chair.setText(QCoreApplication.translate("MainWindow", u"chair", None))
+        self.sofa.setText(QCoreApplication.translate("MainWindow", u"sofa", None))
+        self.board.setText(QCoreApplication.translate("MainWindow", u"board", None))
+        self.bookcase.setText(QCoreApplication.translate("MainWindow", u"bookcase", None))
+        self.clutter.setText(QCoreApplication.translate("MainWindow", u"clutter", None))
         self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Filter", None))
         self.label_credits.setText(QCoreApplication.translate("MainWindow", u"Registered by: Md Ibrahim Khalil", None))
         self.label_version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))

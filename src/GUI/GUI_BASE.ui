@@ -1425,6 +1425,13 @@ QPushButton:pressed {
               </widget>
              </item>
              <item>
+              <widget class="QPushButton" name="pushButton_3">
+               <property name="text">
+                <string>Display</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="btnClassify">
                <property name="minimumSize">
                 <size>
@@ -1815,6 +1822,9 @@ QCheckBox:pressed {
                                <property name="text">
                                 <string>Ceiling</string>
                                </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -1845,6 +1855,9 @@ QCheckBox:pressed {
                                </property>
                                <property name="text">
                                 <string>floor</string>
+                               </property>
+                               <property name="checked">
+                                <bool>true</bool>
                                </property>
                               </widget>
                              </item>
@@ -1908,6 +1921,9 @@ QCheckBox:pressed {
                                <property name="text">
                                 <string>beam</string>
                                </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -1938,6 +1954,9 @@ QCheckBox:pressed {
                                </property>
                                <property name="text">
                                 <string>column</string>
+                               </property>
+                               <property name="checked">
+                                <bool>true</bool>
                                </property>
                               </widget>
                              </item>
@@ -1970,6 +1989,9 @@ QCheckBox:pressed {
                                <property name="text">
                                 <string>window</string>
                                </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -2000,6 +2022,9 @@ QCheckBox:pressed {
                                </property>
                                <property name="text">
                                 <string>door</string>
+                               </property>
+                               <property name="checked">
+                                <bool>true</bool>
                                </property>
                               </widget>
                              </item>
@@ -2036,6 +2061,9 @@ QCheckBox:pressed {
                                <property name="text">
                                 <string>table</string>
                                </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -2066,6 +2094,9 @@ QCheckBox:pressed {
                                </property>
                                <property name="text">
                                 <string>chair</string>
+                               </property>
+                               <property name="checked">
+                                <bool>true</bool>
                                </property>
                               </widget>
                              </item>
@@ -2098,6 +2129,9 @@ QCheckBox:pressed {
                                <property name="text">
                                 <string>sofa</string>
                                </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -2129,6 +2163,9 @@ QCheckBox:pressed {
                                <property name="text">
                                 <string>board</string>
                                </property>
+                               <property name="checked">
+                                <bool>true</bool>
+                               </property>
                               </widget>
                              </item>
                              <item>
@@ -2159,6 +2196,9 @@ QCheckBox:pressed {
                                </property>
                                <property name="text">
                                 <string>bookcase</string>
+                               </property>
+                               <property name="checked">
+                                <bool>true</bool>
                                </property>
                               </widget>
                              </item>
