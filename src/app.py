@@ -78,12 +78,31 @@ class MainWindow(QMainWindow):
             self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//src//data', "Point cloud files (*.ply *.txt *.xyz *.pcd *.las *.laz *.obj *.off *.stl *.vtk *.bin *.pts *.csv *.asc *.npy)")
         self.path = fname[0]
         self.file = self.path.strip().split('/')[-1]
+        self.ext = self.path.strip().split('.')[-1]
         self.log("Open file: %s" % self.file)
-        self.pcd = point_cloud_reader(self.path)
-        self.points = self.pcd.points
-        self.colors = self.pcd.colors
+        if self.ext == 'off':
+            with open(self.path, 'r') as f:
+                points, _ = self.read_off(f)
+                self.points = np.array(points)
+        else:
+            self.pcd = point_cloud_reader(self.path)
+            self.points = self.pcd.points
+            self.colors = self.pcd.colors
         self.log("Displaying raw point cloud")
         self.draw_raw()
+
+    def read_off(self, file):
+        if 'OFF' != file.readline().strip():
+            raise('Not a valid OFF header')
+
+        n_verts, n_faces, __ = tuple(
+            [int(s) for s in file.readline().strip().split(' ')])
+        # print(n_verts, n_faces, __)
+        verts = [[float(s) for s in file.readline().strip().split(' ')]
+                 for i_vert in range(n_verts)]
+        faces = [[int(s) for s in file.readline().strip().split(' ')][1:]
+                 for i_face in range(n_faces)]
+        return verts, faces
 
     def buttonClick(self):
         btn = self.sender()
