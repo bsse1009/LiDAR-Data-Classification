@@ -58,8 +58,8 @@ class MainWindow(QMainWindow):
         self.ui.btnSeg.clicked.connect(lambda: self.prediction())
         self.ui.btnClassify.clicked.connect(self.buttonClick)
 
-        self.classes = ["ceiling", "floor", "column", "table","door", "wall", "beam", "window", "sofa", "chair", "board",
-        "clutter", "bookcase"]
+        self.classes = ["ceiling", "floor", "column", "table", "door", "wall", "beam", "window", "sofa", "chair", "board",
+                        "clutter", "bookcase"]
         self.filtered_classes = []
         self.ui.pushButton_2.clicked.connect(self.buttonClick)
         self.ui.btn_toggle_menu.clicked.connect(self.buttonClick)
@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
         self.checked_all_checkboxes()
 
     def open_file(self):
-        self.clear()
+        # self.clear()
         fname = QFileDialog.getOpenFileName(
             self, 'Open file', 'c://Users//user//Desktop//SPL3//Project//LiDAR_Classification_APP//src//data', "Point cloud files (*.ply *.txt *.xyz *.pcd *.las *.laz *.obj *.off *.stl *.vtk *.bin *.pts *.csv *.asc *.npy)")
         self.path = fname[0]
@@ -99,11 +99,11 @@ class MainWindow(QMainWindow):
             pass
 
         if btnName == "btn_close":
-            pass
+            self.clear()
 
         if btnName == "btnHome":
             self.ui.stackedWidget.setCurrentWidget(self.ui.home_page)
-        
+
         elif btnName == "btnFilter":
             self.ui.stackedWidget.setCurrentWidget(self.ui.filter_page)
 
@@ -115,23 +115,26 @@ class MainWindow(QMainWindow):
 
         elif btnName == "pushButton_2":
             tem = []
-            widgets = (self.ui.verticalLayout_10.itemAt(i).widget() for i in range(self.ui.verticalLayout_10.count()))
+            widgets = (self.ui.verticalLayout_10.itemAt(i).widget()
+                       for i in range(self.ui.verticalLayout_10.count()))
             for widget in widgets:
                 if isinstance(widget, QCheckBox):
-                        print ("checkBox: %s  - %s" %(widget.objectName(), widget.checkState()))
-                        if widget.isChecked():
-                            tem.append(class2label[widget.objectName()])
+                    print("checkBox: %s  - %s" %
+                          (widget.objectName(), widget.checkState()))
+                    if widget.isChecked():
+                        tem.append(class2label[widget.objectName()])
 
-            widgets = (self.ui.verticalLayout_11.itemAt(i).widget() for i in range(self.ui.verticalLayout_11.count()))
+            widgets = (self.ui.verticalLayout_11.itemAt(i).widget()
+                       for i in range(self.ui.verticalLayout_11.count()))
             for widget in widgets:
                 if isinstance(widget, QCheckBox):
-                        print ("checkBox: %s  - %s" %(widget.objectName(), widget.checkState()))
-                        if widget.isChecked():
-                            tem.append(class2label[widget.objectName()])
+                    print("checkBox: %s  - %s" %
+                          (widget.objectName(), widget.checkState()))
+                    if widget.isChecked():
+                        tem.append(class2label[widget.objectName()])
             print(tem)
             self.filtered_classes = tem
 
-    
     def checked_all_checkboxes(self):
         self.ui.ceiling.setChecked(True)
         self.ui.floor.setChecked(True)
@@ -153,6 +156,7 @@ class MainWindow(QMainWindow):
             ctr = vis.get_view_control()
             ctr.rotate(10.0, 0.0)
             return False
+
         def change_background_to_black(vis):
             self.log("changed_background_to_black")
             opt = vis.get_render_option()
@@ -162,12 +166,13 @@ class MainWindow(QMainWindow):
         key_to_callback[ord("K")] = change_background_to_black
         key_to_callback[ord("R")] = rotate_view
 
-        o3d.visualization.draw_geometries_with_key_callbacks(pcd_list, key_to_callback)
+        o3d.visualization.draw_geometries_with_key_callbacks(
+            pcd_list, key_to_callback)
 
-    def log(self,txt:str)->None:
+    def log(self, txt: str) -> None:
         QListWidgetItem(txt, self.ui.listWidget)
-        if int(self.ui.listWidget.count())> 2000:
-            itemtodel=self.ui.listWidget.item(0)
+        if int(self.ui.listWidget.count()) > 2000:
+            itemtodel = self.ui.listWidget.item(0)
             self.ui.listWidget.takeItem(0)
             del itemtodel
 
@@ -183,7 +188,8 @@ class MainWindow(QMainWindow):
 
     def draw_raw(self):
         self.clear()
-        p2 = gl.GLScatterPlotItem(pos = self.points, color=(1,1,1,.4), size=0.5)
+        p2 = gl.GLScatterPlotItem(
+            pos=self.points, color=(1, 1, 1, .4), size=0.5)
         self.w.addItem(p2)
 
     def prediction(self):
@@ -192,30 +198,33 @@ class MainWindow(QMainWindow):
             print("Predictions are available")
             self.log("Predictions are available")
         else:
-            predict({"file": self.file, "num_votes": 1, "test_area": 5, "visual": True, "no_wall": False})
-            self.log("predicting file: %s "% self.file)
+            predict({"file": self.file, "num_votes": 1,
+                    "test_area": 5, "visual": True, "no_wall": False})
+            self.log("predicting file: %s " % self.file)
         self.display_results()
-        
 
     def has_predictions(self):
         dirs = os.listdir(self.res_dir)
         f = self.file.split('.')[0]+'_pred.obj'
         print(f)
-        if  f in dirs:
+        if f in dirs:
             return True
         return False
 
     def display_results(self):
         self.log("displaying results: \n")
-        pred_f = os.path.join(self.res_dir, self.file.split('.')[0]+'_pred.obj')
-        gt_f = os.path.join(self.res_dir,self.file.split('.')[0]+'_gt.obj')
+        pred_f = os.path.join(
+            self.res_dir, self.file.split('.')[0]+'_pred.obj')
+        gt_f = os.path.join(self.res_dir, self.file.split('.')[0]+'_gt.obj')
         pcd_pred = point_cloud_reader(pred_f)
         pcd_gt = point_cloud_reader(gt_f)
 
         if self.filtered_classes and len(self.filtered_classes) < 13:
-            label_f = os.path.join(self.res_dir,self.file.split('.')[0]+'.txt')
+            label_f = os.path.join(
+                self.res_dir, self.file.split('.')[0]+'.txt')
             labels = np.loadtxt(label_f)
-            filterd_idx = [True if l in self.filtered_classes else False for l in labels]
+            filterd_idx = [
+                True if l in self.filtered_classes else False for l in labels]
             points_pred = np.asarray(pcd_pred.points)[filterd_idx]
             colors_pred = np.asarray(pcd_pred.colors)[filterd_idx]
             pcd_pred.points = o3d.utility.Vector3dVector(points_pred)
@@ -226,18 +235,25 @@ class MainWindow(QMainWindow):
             pcd_gt.points = o3d.utility.Vector3dVector(points_gt)
             pcd_gt.colors = o3d.utility.Vector3dVector(colors_gt)
 
-        points = np.asarray(pcd_pred.points)
-        points += [10, 10, 0]
-        pcd_pred.points = o3d.utility.Vector3dVector(points)
-        lines = open("log/single_eval.txt","r").readlines()[-5:]
+        # points = np.asarray(pcd_pred.points)
+        # points += [10, 10, 0]
+        # pcd_pred.points = o3d.utility.Vector3dVector(points)
+        pcd_pred.translate((2, 2, 0))
+        pcd_gt.translate((15, 2, 0))
+
+        bbox = pcd_pred.get_axis_aligned_bounding_box()
+        bbox.color = (1.0, 0.5, 0.0)
+
+        lines = open("log/single_eval.txt", "r").readlines()[-5:]
         print(lines)
         self.log(''.join(lines))
-        self.view_point_cloud([pcd_gt, pcd_pred])
-
+        self.view_point_cloud([pcd_gt, pcd_pred, bbox])
 
     def clear(self):
         self.w1.clear()
-        # self.w.clear()
+        self.w.clear()
+        self.w.addItem(self.g)
+        self.w1.addItem(self.g)
 
 
 # SPLASH SCREEN
@@ -266,7 +282,7 @@ class SplashScreen(QMainWindow):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.progress)
         # TIMER IN MILLISECONDS
-        self.timer.start(35)
+        self.timer.start(100)
 
         # CHANGE DESCRIPTION
 
@@ -275,9 +291,9 @@ class SplashScreen(QMainWindow):
             "<strong>WELCOME</strong> TO MY APPLICATION")
 
         # Change Texts
-        QtCore.QTimer.singleShot(150, lambda: self.ui.label_description.setText(
-            "<strong>LOADING</strong> DATABASE"))
         QtCore.QTimer.singleShot(300, lambda: self.ui.label_description.setText(
+            "<strong>LOADING</strong> DATABASE"))
+        QtCore.QTimer.singleShot(1000, lambda: self.ui.label_description.setText(
             "<strong>LOADING</strong> USER INTERFACE"))
 
         # SHOW ==> MAIN WINDOW
@@ -292,10 +308,10 @@ class SplashScreen(QMainWindow):
         global counter
 
         # SET VALUE TO PROGRESS BAR
-        self.ui.progressBar.setValue(counter)
+        self.ui.progressBar.setValue(counter*4)
 
         # CLOSE SPLASH SCREE AND OPEN APP
-        if counter > 10:
+        if counter > 20:
             # STOP TIMER
             self.timer.stop()
 
