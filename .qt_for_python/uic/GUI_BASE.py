@@ -15,9 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QMainWindow, QPushButton, QSizePolicy,
-    QStackedWidget, QVBoxLayout, QWidget)
+from PySide6.QtOpenGLWidgets import QOpenGLWidget
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGroupBox,
+    QHBoxLayout, QLabel, QListWidget, QListWidgetItem,
+    QMainWindow, QPushButton, QSizePolicy, QSpacerItem,
+    QSplitter, QStackedWidget, QVBoxLayout, QWidget)
 import files_rc
 
 class Ui_MainWindow(object):
@@ -121,9 +123,9 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.centralwidget.setStyleSheet(u"background: transparent;\n"
 "color: rgb(210, 210, 210);")
-        self.verticalLayout_5 = QVBoxLayout(self.centralwidget)
-        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.verticalLayout_5.setContentsMargins(10, 10, 10, 10)
+        self.horizontalLayout = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(10, 10, 10, 10)
         self.frame_main = QFrame(self.centralwidget)
         self.frame_main.setObjectName(u"frame_main")
         self.frame_main.setStyleSheet(u"/* LINE EDIT */\n"
@@ -355,6 +357,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.frame_toggle = QFrame(self.frame_top)
         self.frame_toggle.setObjectName(u"frame_toggle")
+        self.frame_toggle.setMinimumSize(QSize(110, 0))
         self.frame_toggle.setMaximumSize(QSize(70, 16777215))
         self.frame_toggle.setStyleSheet(u"background-color: rgb(27, 29, 35);")
         self.frame_toggle.setFrameShape(QFrame.NoFrame)
@@ -391,6 +394,7 @@ class Ui_MainWindow(object):
 
         self.frame_top_right = QFrame(self.frame_top)
         self.frame_top_right.setObjectName(u"frame_top_right")
+        self.frame_top_right.setMinimumSize(QSize(850, 65))
         self.frame_top_right.setStyleSheet(u"background: transparent;")
         self.frame_top_right.setFrameShape(QFrame.NoFrame)
         self.frame_top_right.setFrameShadow(QFrame.Raised)
@@ -421,19 +425,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout_10.setSpacing(0)
         self.horizontalLayout_10.setObjectName(u"horizontalLayout_10")
         self.horizontalLayout_10.setContentsMargins(5, 0, 10, 0)
-        self.frame_icon_top_bar = QFrame(self.frame_label_top_btns)
-        self.frame_icon_top_bar.setObjectName(u"frame_icon_top_bar")
-        self.frame_icon_top_bar.setMaximumSize(QSize(30, 30))
-        self.frame_icon_top_bar.setStyleSheet(u"background: transparent;\n"
-"background-image: url(:/16x16/icons/16x16/cil-terminal.png);\n"
-"background-position: center;\n"
-"background-repeat: no-repeat;\n"
-"")
-        self.frame_icon_top_bar.setFrameShape(QFrame.StyledPanel)
-        self.frame_icon_top_bar.setFrameShadow(QFrame.Raised)
-
-        self.horizontalLayout_10.addWidget(self.frame_icon_top_bar)
-
         self.label_title_bar_top = QLabel(self.frame_label_top_btns)
         self.label_title_bar_top.setObjectName(u"label_title_bar_top")
         font1 = QFont()
@@ -622,36 +613,25 @@ class Ui_MainWindow(object):
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.frame_left_menu.sizePolicy().hasHeightForWidth())
         self.frame_left_menu.setSizePolicy(sizePolicy3)
-        self.frame_left_menu.setMinimumSize(QSize(70, 0))
+        self.frame_left_menu.setMinimumSize(QSize(110, 0))
         self.frame_left_menu.setMaximumSize(QSize(70, 16777215))
         self.frame_left_menu.setLayoutDirection(Qt.LeftToRight)
         self.frame_left_menu.setStyleSheet(u"background-color: rgb(27, 29, 35);")
         self.frame_left_menu.setFrameShape(QFrame.NoFrame)
         self.frame_left_menu.setFrameShadow(QFrame.Raised)
-        self.gridLayout = QGridLayout(self.frame_left_menu)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.frame_menus = QFrame(self.frame_left_menu)
-        self.frame_menus.setObjectName(u"frame_menus")
-        self.frame_menus.setStyleSheet(u"")
-        self.frame_menus.setFrameShape(QFrame.NoFrame)
-        self.frame_menus.setFrameShadow(QFrame.Raised)
-        self.layout_menus = QVBoxLayout(self.frame_menus)
-        self.layout_menus.setSpacing(0)
-        self.layout_menus.setObjectName(u"layout_menus")
-        self.layout_menus.setContentsMargins(0, 0, 0, 0)
-        self.btnClassify = QPushButton(self.frame_menus)
-        self.btnClassify.setObjectName(u"btnClassify")
-        self.btnClassify.setMinimumSize(QSize(0, 30))
+        self.verticalLayout_6 = QVBoxLayout(self.frame_left_menu)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.btnHome = QPushButton(self.frame_left_menu)
+        self.btnHome.setObjectName(u"btnHome")
+        self.btnHome.setMinimumSize(QSize(0, 30))
         font5 = QFont()
         font5.setPointSize(9)
         font5.setBold(True)
-        self.btnClassify.setFont(font5)
-        self.btnClassify.setLayoutDirection(Qt.LeftToRight)
-        self.btnClassify.setStyleSheet(u"QPushButton {\n"
-"	font: 75 10pt \"MS Shell Dlg 2\";\n"
-"	// background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
-"	background-position: left;\n"
+        self.btnHome.setFont(font5)
+        self.btnHome.setLayoutDirection(Qt.LeftToRight)
+        self.btnHome.setStyleSheet(u"QPushButton {\n"
+"	background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
+"	background-position: bottom;\n"
 "	background-repeat: no-reperat;\n"
 "	background-color: rgb(52, 59, 72);\n"
 "	border: 2px solid rgb(52, 59, 72);\n"
@@ -664,22 +644,114 @@ class Ui_MainWindow(object):
 "	background-color: rgb(85, 170, 255);\n"
 "}")
 
-        self.layout_menus.addWidget(self.btnClassify)
+        self.verticalLayout_6.addWidget(self.btnHome)
 
+        self.pushButton_3 = QPushButton(self.frame_left_menu)
+        self.pushButton_3.setObjectName(u"pushButton_3")
 
-        self.gridLayout.addWidget(self.frame_menus, 0, 0, 1, 1, Qt.AlignTop)
+        self.verticalLayout_6.addWidget(self.pushButton_3)
 
-        self.frame_extra_menus = QFrame(self.frame_left_menu)
-        self.frame_extra_menus.setObjectName(u"frame_extra_menus")
-        sizePolicy3.setHeightForWidth(self.frame_extra_menus.sizePolicy().hasHeightForWidth())
-        self.frame_extra_menus.setSizePolicy(sizePolicy3)
-        self.frame_extra_menus.setFrameShape(QFrame.NoFrame)
-        self.frame_extra_menus.setFrameShadow(QFrame.Raised)
-        self.layout_menu_bottom = QVBoxLayout(self.frame_extra_menus)
-        self.layout_menu_bottom.setSpacing(10)
-        self.layout_menu_bottom.setObjectName(u"layout_menu_bottom")
-        self.layout_menu_bottom.setContentsMargins(0, 0, 0, 25)
-        self.label_user_icon = QLabel(self.frame_extra_menus)
+        self.btnClassify = QPushButton(self.frame_left_menu)
+        self.btnClassify.setObjectName(u"btnClassify")
+        self.btnClassify.setMinimumSize(QSize(0, 30))
+        self.btnClassify.setFont(font5)
+        self.btnClassify.setLayoutDirection(Qt.LeftToRight)
+        self.btnClassify.setStyleSheet(u"QPushButton {\n"
+"	font: 75 10pt \"MS Shell Dlg 2\";\n"
+"	// background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
+"	background-position: left;\n"
+"	background-repeat: no-reperat;\n"
+"	background-color: rgb(52, 59, 72);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QPushButton:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_6.addWidget(self.btnClassify)
+
+        self.btnSeg = QPushButton(self.frame_left_menu)
+        self.btnSeg.setObjectName(u"btnSeg")
+        self.btnSeg.setMinimumSize(QSize(0, 30))
+        self.btnSeg.setFont(font5)
+        self.btnSeg.setLayoutDirection(Qt.LeftToRight)
+        self.btnSeg.setStyleSheet(u"QPushButton {\n"
+"	font: 75 10pt \"MS Shell Dlg 2\";\n"
+"	// background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
+"	background-position: left;\n"
+"	background-repeat: no-reperat;\n"
+"	background-color: rgb(52, 59, 72);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QPushButton:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_6.addWidget(self.btnSeg)
+
+        self.btnFilter = QPushButton(self.frame_left_menu)
+        self.btnFilter.setObjectName(u"btnFilter")
+        self.btnFilter.setMinimumSize(QSize(0, 30))
+        self.btnFilter.setFont(font5)
+        self.btnFilter.setLayoutDirection(Qt.LeftToRight)
+        self.btnFilter.setStyleSheet(u"QPushButton {\n"
+"	font: 75 10pt \"MS Shell Dlg 2\";\n"
+"	// background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
+"	background-position: left;\n"
+"	background-repeat: no-reperat;\n"
+"	background-color: rgb(52, 59, 72);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QPushButton:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_6.addWidget(self.btnFilter)
+
+        self.btnLog = QPushButton(self.frame_left_menu)
+        self.btnLog.setObjectName(u"btnLog")
+        self.btnLog.setMinimumSize(QSize(0, 30))
+        self.btnLog.setFont(font5)
+        self.btnLog.setLayoutDirection(Qt.LeftToRight)
+        self.btnLog.setStyleSheet(u"QPushButton {\n"
+"	font: 75 10pt \"MS Shell Dlg 2\";\n"
+"	// background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
+"	background-position: left;\n"
+"	background-repeat: no-reperat;\n"
+"	background-color: rgb(52, 59, 72);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QPushButton:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_6.addWidget(self.btnLog)
+
+        self.verticalSpacer = QSpacerItem(20, 60, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.verticalLayout_6.addItem(self.verticalSpacer)
+
+        self.label_user_icon = QLabel(self.frame_left_menu)
         self.label_user_icon.setObjectName(u"label_user_icon")
         sizePolicy4 = QSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         sizePolicy4.setHorizontalStretch(0)
@@ -687,12 +759,13 @@ class Ui_MainWindow(object):
         sizePolicy4.setHeightForWidth(self.label_user_icon.sizePolicy().hasHeightForWidth())
         self.label_user_icon.setSizePolicy(sizePolicy4)
         self.label_user_icon.setMinimumSize(QSize(60, 60))
-        self.label_user_icon.setMaximumSize(QSize(60, 60))
+        self.label_user_icon.setMaximumSize(QSize(1000, 10000))
         font6 = QFont()
         font6.setFamilies([u"Segoe UI"])
         font6.setPointSize(12)
         self.label_user_icon.setFont(font6)
         self.label_user_icon.setStyleSheet(u"QLabel {\n"
+"	background-image: url(:/16x16/icons/16x16/cil-user.png);\n"
 "	border-radius: 30px;\n"
 "	background-color: rgb(44, 49, 60);\n"
 "	border: 5px solid rgb(39, 44, 54);\n"
@@ -701,16 +774,14 @@ class Ui_MainWindow(object):
 "}")
         self.label_user_icon.setAlignment(Qt.AlignCenter)
 
-        self.layout_menu_bottom.addWidget(self.label_user_icon, 0, Qt.AlignHCenter)
+        self.verticalLayout_6.addWidget(self.label_user_icon)
 
 
-        self.gridLayout.addWidget(self.frame_extra_menus, 2, 0, 1, 1, Qt.AlignBottom)
-
-
-        self.horizontalLayout_2.addWidget(self.frame_left_menu)
+        self.horizontalLayout_2.addWidget(self.frame_left_menu, 0, Qt.AlignHCenter)
 
         self.frame_content_right = QFrame(self.frame_center)
         self.frame_content_right.setObjectName(u"frame_content_right")
+        self.frame_content_right.setMinimumSize(QSize(850, 0))
         self.frame_content_right.setStyleSheet(u"background-color: rgb(44, 49, 60);")
         self.frame_content_right.setFrameShape(QFrame.NoFrame)
         self.frame_content_right.setFrameShadow(QFrame.Raised)
@@ -728,17 +799,374 @@ class Ui_MainWindow(object):
         self.horizontalLayout_9.setContentsMargins(5, 5, 5, 5)
         self.stackedWidget = QStackedWidget(self.frame_content)
         self.stackedWidget.setObjectName(u"stackedWidget")
-        self.stackedWidget.setStyleSheet(u"background: transparent;")
-        self.display_page = QWidget()
-        self.display_page.setObjectName(u"display_page")
-        self.verticalLayout_10 = QVBoxLayout(self.display_page)
-        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.stackedWidget.addWidget(self.display_page)
-        self.classification_page = QWidget()
-        self.classification_page.setObjectName(u"classification_page")
-        self.verticalLayout_7 = QVBoxLayout(self.classification_page)
+        self.diplay_page = QWidget()
+        self.diplay_page.setObjectName(u"diplay_page")
+        self.verticalLayout_13 = QVBoxLayout(self.diplay_page)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.openGLWidget = QOpenGLWidget(self.diplay_page)
+        self.openGLWidget.setObjectName(u"openGLWidget")
+
+        self.verticalLayout_13.addWidget(self.openGLWidget)
+
+        self.stackedWidget.addWidget(self.diplay_page)
+        self.log_page = QWidget()
+        self.log_page.setObjectName(u"log_page")
+        self.verticalLayout_5 = QVBoxLayout(self.log_page)
+        self.verticalLayout_5.setObjectName(u"verticalLayout_5")
+        self.groupBox = QGroupBox(self.log_page)
+        self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setLayoutDirection(Qt.LeftToRight)
+        self.verticalLayout_7 = QVBoxLayout(self.groupBox)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-        self.stackedWidget.addWidget(self.classification_page)
+        self.listWidget = QListWidget(self.groupBox)
+        QListWidgetItem(self.listWidget)
+        self.listWidget.setObjectName(u"listWidget")
+
+        self.verticalLayout_7.addWidget(self.listWidget)
+
+
+        self.verticalLayout_5.addWidget(self.groupBox)
+
+        self.stackedWidget.addWidget(self.log_page)
+        self.home_page = QWidget()
+        self.home_page.setObjectName(u"home_page")
+        self.verticalLayout_8 = QVBoxLayout(self.home_page)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.label = QLabel(self.home_page)
+        self.label.setObjectName(u"label")
+        self.label.setTextFormat(Qt.AutoText)
+        self.label.setAlignment(Qt.AlignLeading|Qt.AlignLeft|Qt.AlignTop)
+        self.label.setWordWrap(True)
+        self.label.setMargin(25)
+        self.label.setOpenExternalLinks(True)
+
+        self.verticalLayout_8.addWidget(self.label)
+
+        self.stackedWidget.addWidget(self.home_page)
+        self.filter_page = QWidget()
+        self.filter_page.setObjectName(u"filter_page")
+        self.verticalLayout_9 = QVBoxLayout(self.filter_page)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.widget = QWidget(self.filter_page)
+        self.widget.setObjectName(u"widget")
+        font7 = QFont()
+        font7.setBold(False)
+        font7.setItalic(False)
+        self.widget.setFont(font7)
+        self.verticalLayout_14 = QVBoxLayout(self.widget)
+        self.verticalLayout_14.setObjectName(u"verticalLayout_14")
+        self.verticalLayout_12 = QVBoxLayout()
+        self.verticalLayout_12.setObjectName(u"verticalLayout_12")
+        self.splitter = QSplitter(self.widget)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Horizontal)
+        self.widget1 = QWidget(self.splitter)
+        self.widget1.setObjectName(u"widget1")
+        self.verticalLayout_10 = QVBoxLayout(self.widget1)
+        self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.checkBox = QCheckBox(self.widget1)
+        self.checkBox.setObjectName(u"checkBox")
+        font8 = QFont()
+        font8.setFamilies([u"MS Shell Dlg 2"])
+        font8.setPointSize(10)
+        font8.setBold(False)
+        font8.setItalic(False)
+        self.checkBox.setFont(font8)
+        self.checkBox.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox.setChecked(True)
+
+        self.verticalLayout_10.addWidget(self.checkBox)
+
+        self.checkBox_2 = QCheckBox(self.widget1)
+        self.checkBox_2.setObjectName(u"checkBox_2")
+        self.checkBox_2.setFont(font8)
+        self.checkBox_2.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_2.setChecked(True)
+
+        self.verticalLayout_10.addWidget(self.checkBox_2)
+
+        self.checkBox_6 = QCheckBox(self.widget1)
+        self.checkBox_6.setObjectName(u"checkBox_6")
+        self.checkBox_6.setFont(font8)
+        self.checkBox_6.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_10.addWidget(self.checkBox_6)
+
+        self.checkBox_7 = QCheckBox(self.widget1)
+        self.checkBox_7.setObjectName(u"checkBox_7")
+        self.checkBox_7.setFont(font8)
+        self.checkBox_7.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_7.setChecked(True)
+
+        self.verticalLayout_10.addWidget(self.checkBox_7)
+
+        self.checkBox_3 = QCheckBox(self.widget1)
+        self.checkBox_3.setObjectName(u"checkBox_3")
+        self.checkBox_3.setFont(font8)
+        self.checkBox_3.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_3.setChecked(True)
+
+        self.verticalLayout_10.addWidget(self.checkBox_3)
+
+        self.checkBox_8 = QCheckBox(self.widget1)
+        self.checkBox_8.setObjectName(u"checkBox_8")
+        self.checkBox_8.setFont(font8)
+        self.checkBox_8.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_8.setChecked(True)
+
+        self.verticalLayout_10.addWidget(self.checkBox_8)
+
+        self.checkBox_5 = QCheckBox(self.widget1)
+        self.checkBox_5.setObjectName(u"checkBox_5")
+        self.checkBox_5.setFont(font8)
+        self.checkBox_5.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_5.setChecked(True)
+
+        self.verticalLayout_10.addWidget(self.checkBox_5)
+
+        self.splitter.addWidget(self.widget1)
+        self.widget2 = QWidget(self.splitter)
+        self.widget2.setObjectName(u"widget2")
+        self.verticalLayout_11 = QVBoxLayout(self.widget2)
+        self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.checkBox_4 = QCheckBox(self.widget2)
+        self.checkBox_4.setObjectName(u"checkBox_4")
+        self.checkBox_4.setFont(font8)
+        self.checkBox_4.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_4.setChecked(True)
+
+        self.verticalLayout_11.addWidget(self.checkBox_4)
+
+        self.checkBox_10 = QCheckBox(self.widget2)
+        self.checkBox_10.setObjectName(u"checkBox_10")
+        self.checkBox_10.setFont(font8)
+        self.checkBox_10.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_10.setChecked(True)
+
+        self.verticalLayout_11.addWidget(self.checkBox_10)
+
+        self.checkBox_9 = QCheckBox(self.widget2)
+        self.checkBox_9.setObjectName(u"checkBox_9")
+        self.checkBox_9.setFont(font8)
+        self.checkBox_9.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_9.setChecked(True)
+
+        self.verticalLayout_11.addWidget(self.checkBox_9)
+
+        self.checkBox_11 = QCheckBox(self.widget2)
+        self.checkBox_11.setObjectName(u"checkBox_11")
+        self.checkBox_11.setFont(font8)
+        self.checkBox_11.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_11.setChecked(True)
+
+        self.verticalLayout_11.addWidget(self.checkBox_11)
+
+        self.checkBox_13 = QCheckBox(self.widget2)
+        self.checkBox_13.setObjectName(u"checkBox_13")
+        self.checkBox_13.setFont(font8)
+        self.checkBox_13.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+        self.checkBox_13.setChecked(True)
+
+        self.verticalLayout_11.addWidget(self.checkBox_13)
+
+        self.checkBox_12 = QCheckBox(self.widget2)
+        self.checkBox_12.setObjectName(u"checkBox_12")
+        self.checkBox_12.setFont(font8)
+        self.checkBox_12.setStyleSheet(u"QCheckBox {\n"
+"	font: 50 10pt \"MS Shell Dlg 2\";\n"
+"	background-color: rgb(0, 85, 127);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QCheckBox:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QCheckBox:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_11.addWidget(self.checkBox_12)
+
+        self.splitter.addWidget(self.widget2)
+
+        self.verticalLayout_12.addWidget(self.splitter)
+
+        self.pushButton_2 = QPushButton(self.widget)
+        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.pushButton_2.setFont(font5)
+        self.pushButton_2.setStyleSheet(u"QPushButton {\n"
+"	font: 75 10pt \"MS Shell Dlg 2\";\n"
+"	// background-image:url(:/16x16/icons/16x16/cil-home.png);\n"
+"	background-position: left;\n"
+"	background-repeat: no-reperat;\n"
+"	background-color: rgb(52, 59, 72);\n"
+"	border: 2px solid rgb(52, 59, 72);\n"
+"	border-radius: 5px;\n"
+"	padding: 1em;\n"
+"}\n"
+"QPushButton:hover {\n"
+"	background-color: rgb(33, 37, 43);\n"
+"}\n"
+"QPushButton:pressed {	\n"
+"	background-color: rgb(85, 170, 255);\n"
+"}")
+
+        self.verticalLayout_12.addWidget(self.pushButton_2)
+
+
+        self.verticalLayout_14.addLayout(self.verticalLayout_12)
+
+
+        self.verticalLayout_9.addWidget(self.widget)
+
+        self.stackedWidget.addWidget(self.filter_page)
 
         self.horizontalLayout_9.addWidget(self.stackedWidget)
 
@@ -793,7 +1221,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.frame_center)
 
 
-        self.verticalLayout_5.addWidget(self.frame_main)
+        self.horizontalLayout.addWidget(self.frame_main)
 
         MainWindow.setCentralWidget(self.centralwidget)
         QWidget.setTabOrder(self.btn_minimize, self.btn_maximize_restore)
@@ -801,9 +1229,6 @@ class Ui_MainWindow(object):
         QWidget.setTabOrder(self.btn_close, self.btn_toggle_menu)
 
         self.retranslateUi(MainWindow)
-
-        self.stackedWidget.setCurrentIndex(0)
-
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -830,8 +1255,38 @@ class Ui_MainWindow(object):
         self.label_top_info_1.setText(QCoreApplication.translate("MainWindow", u"C:\\Users\\user\\Desktop\\SPL3\\DATA", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Open LiDAR", None))
         self.label_top_info_2.setText(QCoreApplication.translate("MainWindow", u"| HOME", None))
+        self.btnHome.setText("")
+        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Display", None))
         self.btnClassify.setText(QCoreApplication.translate("MainWindow", u"Classify", None))
-        self.label_user_icon.setText(QCoreApplication.translate("MainWindow", u"WM", None))
+        self.btnSeg.setText(QCoreApplication.translate("MainWindow", u"Segmentation", None))
+        self.btnFilter.setText(QCoreApplication.translate("MainWindow", u"Filter", None))
+        self.btnLog.setText(QCoreApplication.translate("MainWindow", u"Log", None))
+        self.label_user_icon.setText("")
+        self.groupBox.setTitle(QCoreApplication.translate("MainWindow", u"Log Page", None))
+
+        __sortingEnabled = self.listWidget.isSortingEnabled()
+        self.listWidget.setSortingEnabled(False)
+        ___qlistwidgetitem = self.listWidget.item(0)
+        ___qlistwidgetitem.setText(QCoreApplication.translate("MainWindow", u"Log will display here", None));
+        self.listWidget.setSortingEnabled(__sortingEnabled)
+
+        self.label.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:600; color:#16a0ff;\">LiDAR Point Cloud Classifier</span></p><p align=\"center\"><span style=\" color:#8590c8;\">A GUI Application for Classifying and segmenting large scale </span><a href=\"https://becominghuman.ai/whats-lidar-and-what-s-3d-point-cloud-1f4ccd998e7b/\"><span style=\" text-decoration: underline; color:#0264af;\">LiDAR Point Cloud</span></a><span style=\" color:#8590c8;\"> files. We can also Display and Save the Classified point Cloud objects in a efficient way by this app. The application created using </span><a href=\"https://www.python.org/\"><span style=\" text-decoration: underline; color:#0264af;\">Python</span></a><span style=\" color:#8590c8;\"> and </span><a href=\"https://pypi.org/project/PySide6/\"><span style=\" text-decoration: underline; color:#0264af;\">PySide6</span></a><span style=\" color:#8590c8;\">, </span><a href=\"https://pytorch.org/\"><span style=\" text-decoration: underline; color:#0264af;\">Pytorch</span>"
+                        "</a><span style=\" color:#8590c8;\">,</span><a href=\"http://www.open3d.org/\"><span style=\" text-decoration: underline; color:#0264af;\">Open3D</span></a></p><p align=\"center\"><span style=\" color:#8590c8;\">MIT License</span></p><p align=\"center\"><span style=\" color:#16a0ff;\">Created by: </span><a href=\"https://github.com/bsse1009\"><span style=\" text-decoration: underline; color:#0264af;\">bsse1009@iit.du.ac.bd</span></a><span style=\" color:#16a0ff;\"> @GitHub</span></p><p align=\"center\"><br/></p><p align=\"right\"><a href=\"https://github.com/bsse1009/LiDAR-Data-Classification\"><span style=\" text-decoration: underline; color:#0264af;\">GitHub Repository</span></a></p><p align=\"right\"><a href=\"https://github.com/bsse1009/LiDAR-Data-Classification\"><span style=\" text-decoration: underline; color:#0264af;\">Releases</span></a></p><p align=\"right\"><a href=\"https://github.com/bsse1009/LiDAR-Data-Classification/issues/new\"><span style=\" text-decoration: underline; color:#0264af;\">Report "
+                        "an issue</span></a></p><p align=\"right\"><br/></p><p align=\"center\"><br/></p></body></html> ", None))
+        self.checkBox.setText(QCoreApplication.translate("MainWindow", u"Ceiling", None))
+        self.checkBox_2.setText(QCoreApplication.translate("MainWindow", u"floor", None))
+        self.checkBox_6.setText(QCoreApplication.translate("MainWindow", u"wall", None))
+        self.checkBox_7.setText(QCoreApplication.translate("MainWindow", u"beam", None))
+        self.checkBox_3.setText(QCoreApplication.translate("MainWindow", u"column", None))
+        self.checkBox_8.setText(QCoreApplication.translate("MainWindow", u"window", None))
+        self.checkBox_5.setText(QCoreApplication.translate("MainWindow", u"door", None))
+        self.checkBox_4.setText(QCoreApplication.translate("MainWindow", u"table", None))
+        self.checkBox_10.setText(QCoreApplication.translate("MainWindow", u"chair", None))
+        self.checkBox_9.setText(QCoreApplication.translate("MainWindow", u"sofa", None))
+        self.checkBox_11.setText(QCoreApplication.translate("MainWindow", u"board", None))
+        self.checkBox_13.setText(QCoreApplication.translate("MainWindow", u"bookcase", None))
+        self.checkBox_12.setText(QCoreApplication.translate("MainWindow", u"clutter", None))
+        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Filter", None))
         self.label_credits.setText(QCoreApplication.translate("MainWindow", u"Registered by: Md Ibrahim Khalil", None))
         self.label_version.setText(QCoreApplication.translate("MainWindow", u"v1.0.0", None))
     # retranslateUi
